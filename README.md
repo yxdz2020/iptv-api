@@ -72,16 +72,16 @@
 - 接口源：
 
 ```bash
-https://ghproxy.cc/https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u
+https://ghproxy.cc/https://raw.githubusercontent.com/yxdz2020/iptv-api/gd/output/result.m3u
 ```
 
 ```bash
-https://ghproxy.cc/https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.txt
+https://ghproxy.cc/https://raw.githubusercontent.com/yxdz2020/iptv-api/gd/output/result.txt
 ```
 
 🙏 感谢由[ghproxy.cc](https://ghproxy.cc)提供的代理加速服务
 
-或
+### 或
 
 ```bash
 https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.m3u
@@ -97,7 +97,7 @@ https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.txt
 https://ghproxy.cc/https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 ```
 
-或
+### 或
 
 ```bash
 https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/source.json
@@ -295,24 +295,10 @@ docker run -d -p 8000:8000 guovern/iptv-api:lite
 
 [更新日志](./CHANGELOG.md)
 
-## 赞赏
-
-<div>开发维护不易，请我喝杯咖啡☕️吧~</div>
-
-| 支付宝                                  | 微信                                      |
-|--------------------------------------|-----------------------------------------|
-| ![支付宝扫码](./static/images/alipay.jpg) | ![微信扫码](./static/images/appreciate.jpg) |
-
-## 关注
-
-微信公众号搜索 Govin，或扫码，接收更新推送、学习更多使用技巧：
-
-![微信公众号](./static/images/qrcode.jpg)
-
 ## 免责声明
 
 本项目仅供学习交流用途，接口数据均来源于网络，如有侵权，请联系删除
 
 ## 许可证
 
-[MIT](./LICENSE) License &copy; 2024-PRESENT [Govin](https://github.com/guovin)
+[MIT](./LICENSE) License &copy; 2024-PRESENT [yxdz2020](https://github.com/yxdz2020)

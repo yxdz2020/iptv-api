@@ -16,6 +16,7 @@ class ChannelData(TypedDict):
     origin: OriginType
     ipv_type: IPvType
     headers: NotRequired[dict[str, str] | None]
+    catchup: NotRequired[dict[str, str] | None]
     extra_info: NotRequired[str]
 
 

@@ -17,8 +17,8 @@ from utils.types import TestResult, ChannelTestResult, TestResultCacheData, Chan
 
 http.cookies._is_legal_key = lambda _: True
 cache: TestResultCacheData = {}
-sort_timeout = config.sort_timeout
-sort_duplicate_limit = config.sort_duplicate_limit
+speed_test_timeout = config.speed_test_timeout
+speed_test_filter_host = config.speed_test_filter_host
 open_filter_resolution = config.open_filter_resolution
 min_resolution_value = config.min_resolution_value
 max_resolution_value = config.max_resolution_value
@@ -31,13 +31,13 @@ default_ipv6_resolution = "1920x1080"
 
 
 async def get_speed_with_download(url: str, headers: dict = None, session: ClientSession = None,
-                                  timeout: int = sort_timeout) -> dict[
+                                  timeout: int = speed_test_timeout) -> dict[
     str, float | None]:
     """
     Get the speed of the url with a total timeout
     """
     start_time = time()
-    delay = None
+    delay = -1
     total_size = 0
     if session is None:
         session = ClientSession(connector=TCPConnector(ssl=False), trust_env=True)
@@ -90,7 +90,7 @@ async def get_headers(url: str, headers: dict = None, session: ClientSession = N
 
 
 async def get_url_content(url: str, headers: dict = None, session: ClientSession = None,
-                          timeout: int = sort_timeout) -> str:
+                          timeout: int = speed_test_timeout) -> str:
     """
     Get the content of the url
     """
@@ -126,11 +126,11 @@ def check_m3u8_valid(headers: CIMultiDictProxy[str] | dict[any, any]) -> bool:
 
 async def get_result(url: str, headers: dict = None, resolution: str = None,
                      filter_resolution: bool = config.open_filter_resolution,
-                     timeout: int = sort_timeout) -> dict[str, float | None]:
+                     timeout: int = speed_test_timeout) -> dict[str, float | None]:
     """
     Get the test result of the url
     """
-    info = {'speed': None, 'delay': None, 'resolution': resolution}
+    info = {'speed': 0, 'delay': -1, 'resolution': resolution}
     location = None
     try:
         url = quote(url, safe=':/?$&=@[]%').partition('$')[0]
@@ -141,25 +141,25 @@ async def get_result(url: str, headers: dict = None, resolution: str = None,
                 info.update(await get_result(location, headers, resolution, filter_resolution, timeout))
             else:
                 url_content = await get_url_content(url, headers, session, timeout)
-                if not url_content:
-                    raise Exception("Unable to get url content")
-                m3u8_obj = m3u8.loads(url_content)
-                playlists = m3u8_obj.playlists
-                segments = m3u8_obj.segments
-                if playlists:
-                    best_playlist = max(m3u8_obj.playlists, key=lambda p: p.stream_info.bandwidth)
-                    playlist_url = urljoin(url, best_playlist.uri)
-                    playlist_content = await get_url_content(playlist_url, headers, session, timeout)
-                    if playlist_content:
-                        media_playlist = m3u8.loads(playlist_content)
-                        segment_urls = [urljoin(playlist_url, segment.uri) for segment in media_playlist.segments]
+                if url_content:
+                    m3u8_obj = m3u8.loads(url_content)
+                    playlists = m3u8_obj.playlists
+                    segments = m3u8_obj.segments
+                    if playlists:
+                        best_playlist = max(m3u8_obj.playlists, key=lambda p: p.stream_info.bandwidth)
+                        playlist_url = urljoin(url, best_playlist.uri)
+                        playlist_content = await get_url_content(playlist_url, headers, session, timeout)
+                        if playlist_content:
+                            media_playlist = m3u8.loads(playlist_content)
+                            segment_urls = [urljoin(playlist_url, segment.uri) for segment in media_playlist.segments]
+                    else:
+                        segment_urls = [urljoin(url, segment.uri) for segment in segments]
+                    if not segment_urls:
+                        raise Exception("Segment urls not found")
                 else:
-                    segment_urls = [urljoin(url, segment.uri) for segment in segments]
-                if not segment_urls:
-                    if res_headers.get('Content-Length'):
-                        res_info = await get_speed_with_download(url, headers, session, timeout)
-                        info.update({'speed': res_info['speed'], 'delay': res_info['delay']})
-                    raise Exception("Segment urls not found")
+                    res_info = await get_speed_with_download(url, headers, session, timeout)
+                    info.update({'speed': res_info['speed'], 'delay': res_info['delay']})
+                    raise Exception("No url content, use download with timeout to test")
                 start_time = time()
                 tasks = [get_speed_with_download(ts_url, headers, session, timeout) for ts_url in segment_urls[:5]]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -170,12 +170,12 @@ async def get_result(url: str, headers: dict = None, resolution: str = None,
     except:
         pass
     finally:
-        if not resolution and filter_resolution and not location and info['delay'] is not None:
+        if not resolution and filter_resolution and not location and info['delay'] != -1:
             info['resolution'] = await get_resolution_ffprobe(url, headers, timeout)
         return info
 
 
-async def get_delay_requests(url, timeout=sort_timeout, proxy=None):
+async def get_delay_requests(url, timeout=speed_test_timeout, proxy=None):
     """
     Get the delay of the url by requests
     """
@@ -216,7 +216,7 @@ def check_ffmpeg_installed_status():
         return status
 
 
-async def ffmpeg_url(url, timeout=sort_timeout):
+async def ffmpeg_url(url, timeout=speed_test_timeout):
     """
     Get url info by ffmpeg
     """
@@ -247,7 +247,7 @@ async def ffmpeg_url(url, timeout=sort_timeout):
         return res
 
 
-async def get_resolution_ffprobe(url: str, headers: dict = None, timeout: int = sort_timeout) -> str | None:
+async def get_resolution_ffprobe(url: str, headers: dict = None, timeout: int = speed_test_timeout) -> str | None:
     """
     Get the resolution of the url by ffprobe
     """
@@ -313,48 +313,71 @@ async def check_stream_delay(url_info):
         return -1
 
 
-def get_avg_result(result, default_resolution=0) -> TestResult:
+def get_avg_result(result) -> TestResult:
     return {
         'speed': sum(item['speed'] or 0 for item in result) / len(result),
         'delay': max(
             int(sum(item['delay'] or -1 for item in result) / len(result)), -1),
-        'resolution': max((item['resolution'] for item in result), key=get_resolution_value) or default_resolution
+        'resolution': max((item['resolution'] for item in result), key=get_resolution_value)
     }
 
 
-async def get_speed(url, headers=None, cache_key=None, is_ipv6=False, ipv6_proxy=None, resolution=None,
-                    filter_resolution=open_filter_resolution, timeout=sort_timeout, callback=None) -> TestResult:
+def get_speed_result(key: str) -> TestResult:
+    """
+    Get the speed result of the url
+    """
+    if key in cache:
+        return get_avg_result(cache[key])
+    else:
+        return {'speed': 0, 'delay': -1, 'resolution': 0}
+
+
+def get_ipv6_default_result() -> TestResult:
+    """
+    Get the default result of the ipv6
+    """
+    return {
+        'speed': float("inf"),
+        'delay': default_ipv6_delay,
+        'resolution': default_ipv6_resolution
+    }
+
+
+async def get_speed(data, headers=None, ipv6_proxy=None, filter_resolution=open_filter_resolution,
+                    timeout=speed_test_timeout, callback=None) -> TestResult:
     """
     Get the speed (response time and resolution) of the url
     """
-    data: TestResult = {'speed': None, 'delay': None, 'resolution': resolution}
+    url = data['url']
+    resolution = data['resolution']
+    result: TestResult = {'speed': 0, 'delay': -1, 'resolution': resolution}
     try:
-        if cache_key in cache and len(cache[cache_key]) >= sort_duplicate_limit:
-            data = get_avg_result(cache[cache_key], resolution)
+        cache_key = data['host'] if speed_test_filter_host else url
+        if cache_key and cache_key in cache:
+            result = get_avg_result(cache[cache_key])
         else:
-            if is_ipv6 and ipv6_proxy:
-                data['speed'] = float("inf")
-                data['delay'] = default_ipv6_delay
-                data['resolution'] = default_ipv6_resolution
+            if data['ipv_type'] == "ipv6" and ipv6_proxy:
+                result.update(get_ipv6_default_result())
             elif constants.rt_url_pattern.match(url) is not None:
                 start_time = time()
-                if not data['resolution'] and filter_resolution:
-                    data['resolution'] = await get_resolution_ffprobe(url, headers, timeout)
-                data['delay'] = int(round((time() - start_time) * 1000))
-                data['speed'] = float("inf") if data['resolution'] is not None else 0
+                if not result['resolution'] and filter_resolution:
+                    result['resolution'] = await get_resolution_ffprobe(url, headers, timeout)
+                result['delay'] = int(round((time() - start_time) * 1000))
+                if result['resolution'] is not None:
+                    result['speed'] = float("inf")
             else:
-                data.update(await get_result(url, headers, resolution, filter_resolution, timeout))
+                result.update(await get_result(url, headers, resolution, filter_resolution, timeout))
             if cache_key:
-                cache.setdefault(cache_key, []).append(data)
+                cache.setdefault(cache_key, []).append(result)
     finally:
         if callback:
             callback()
-        return data
+        return result
 
 
-def sort_urls_key(item: TestResult | ChannelData) -> float:
+def sort_result_key(item: TestResult | ChannelData) -> float:
     """
-    Sort the urls with key
+    Sort the result with key
     """
     speed, origin = item["speed"], item["origin"]
     if origin in ["whitelist", "live", "hls"]:
@@ -363,53 +386,37 @@ def sort_urls_key(item: TestResult | ChannelData) -> float:
         return speed
 
 
-def sort_urls(name, data, supply=open_supply, filter_speed=open_filter_speed, min_speed=min_speed_value,
-              filter_resolution=open_filter_resolution, min_resolution=min_resolution_value,
-              max_resolution=max_resolution_value, logger=None) -> list[ChannelTestResult]:
+def get_sort_result(results, name=None, supply=open_supply, filter_speed=open_filter_speed,
+                    min_speed=min_speed_value,
+                    filter_resolution=open_filter_resolution, min_resolution=min_resolution_value,
+                    max_resolution=max_resolution_value, ipv6_support=True, logger=None) -> list[ChannelTestResult]:
     """
-    Sort the urls with info
+    get the sort result
     """
-    filter_data = []
-    for item in data:
-        host, date, resolution, origin, ipv_type = (
-            item["host"],
-            item["date"],
-            item["resolution"],
-            item["origin"],
-            item["ipv_type"]
-        )
-        result: ChannelTestResult = {
-            **item,
-            "delay": None,
-            "speed": None,
-        }
-        if origin in ["whitelist", "live", "hls"]:
-            filter_data.append(result)
+    total_result = []
+    for result in results:
+        if result["origin"] in ["whitelist", "live", "hls"]:
+            total_result.append(result)
             continue
-        if host and host in cache:
-            cache_list = cache[host]
-            if cache_list:
-                avg_result = get_avg_result(cache_list, resolution)
-                avg_speed, avg_delay, resolution = avg_result["speed"], avg_result["delay"], avg_result["resolution"]
-                try:
-                    if logger:
-                        logger.info(
-                            f"Name: {name}, URL: {result["url"]}, IPv_Type: {ipv_type}, Date: {date}, Delay: {avg_delay} ms, Speed: {avg_speed:.2f} M/s, Resolution: {resolution}"
-                        )
-                except Exception as e:
-                    print(e)
-                if avg_delay < 0:
+        if not ipv6_support and result["ipv_type"] == "ipv6":
+            result.update(get_ipv6_default_result())
+        result_speed, result_delay, resolution = result["speed"] or 0, result["delay"] or -1, result["resolution"]
+        try:
+            if logger:
+                logger.info(
+                    f"Name: {name}, URL: {result["url"]}, IPv_Type: {result["ipv_type"]}, Date: {result["date"]}, Delay: {result_delay} ms, Speed: {result_speed:.2f} M/s, Resolution: {resolution}"
+                )
+        except Exception as e:
+            print(e)
+        if result_delay < 0:
+            continue
+        if not supply:
+            if filter_speed and result_speed < min_speed:
+                continue
+            if filter_resolution and resolution:
+                resolution_value = get_resolution_value(resolution)
+                if resolution_value < min_resolution or resolution_value > max_resolution:
                     continue
-                if not supply:
-                    if filter_speed and avg_speed < min_speed:
-                        continue
-                    if filter_resolution and resolution:
-                        resolution_value = get_resolution_value(resolution)
-                        if resolution_value < min_resolution or resolution_value > max_resolution:
-                            continue
-                result["delay"] = avg_delay
-                result["speed"] = avg_speed
-                result["resolution"] = resolution
-                filter_data.append(result)
-    filter_data.sort(key=sort_urls_key, reverse=True)
-    return filter_data
+        total_result.append(result)
+    total_result.sort(key=sort_result_key, reverse=True)
+    return total_result

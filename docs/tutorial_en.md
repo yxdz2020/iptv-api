@@ -138,6 +138,18 @@ Adjust the configuration as needed, here is the default configuration descriptio
   ![Local sources](./images/local.png 'Local sources')
 
 
+- EPG Source (`config/epg.txt`)
+
+  The source of program guide information. The program will sequentially fetch the program guide data from the
+  subscription addresses in the file and aggregate the output.
+
+
+- Channel Aliases (`config/alias.txt`)
+
+  A list of aliases for channel names, used to map multiple names to a single name when fetching from the interface,
+  improving the fetch volume and accuracy. Format: TemplateChannelName,Alias1,Alias2,Alias3
+
+
 - Blacklist (`config/blacklist.txt`)
 
   Interfaces that match the blacklist keywords will be filtered and not collected, such as low-quality interfaces with

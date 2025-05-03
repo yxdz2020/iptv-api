@@ -1,5 +1,113 @@
 # 更新日志（Changelog）
 
+## v1.7.0
+
+### 2025/5/1
+
+### 🚀 新功能 ###
+
+---
+
+- 新增`频道别名`功能（`config/alias.txt`），提升频道名称匹配能力
+- 新增`EPG`功能（订阅文件配置`config/epg.txt`），显示频道预告信息
+- 支持`回放类接口`获取与生成
+- 新增`历史结果`的冻结与解冻，`冻结`：无效结果不参与测速，`解冻`：无结果时自动解冻重新测速
+- 新增`最大分辨率`限制`min_resolution`
+- 支持含`请求头`信息接口测速与生成，需播放器支持才可播放，可通过`open_headers`控制是否开启
+- 新增测速并发数量配置`speed_test_limit`，实现控制测速负载压力
+- 新增`Host数据共享`配置`speed_test_filter_host`，实现相同Host地址接口可共享测速结果
+- 新增`推流统计`GUI按钮
+
+### 🌟 优化 ###
+
+---
+
+- 重构`测速与排序`逻辑，适配更多类型接口的测速（#1009）
+- 提供`内置结果`，解决首次运行等待期间无结果问题（可能不稳定，建议使用更新后结果）
+- 优化接口测速默认为`全接口测速`，解决Host共享结果部分接口测速不准确问题
+- 调整测速结果以`速率`排序，`分辨率`不再参与，解决部分低速率接口在前的问题
+- 默认开启`推流`，调整`HLS`分片配置，推荐使用`HLS`接口，缓解卡顿情况
+- 重构接口`额外信息`处理逻辑
+- 测速相关配置项更名为`speed_test_*`，修改输出日志文案
+- 调整默认最低接口速率为`0.5M/s`
+- 更新黑名单，增加无效接口与`音频`接口
+
+### 🐛 修复 ###
+
+---
+
+- 修复工作流运行问题，更换使用最新`ubuntu`版本（#1032）
+- 修复`M3U`订阅源白名单失效问题（#1019）
+- 修复部分`组播源`测速问题（#1026）
+- 修复接口协议分类结果生成失败问题
+
+### 🗑️ 移除 ###
+
+---
+
+- 移除部分失效订阅源
+- 移除代理更新功能`open_proxy`
+- 移除保留模式`open_keep_all`
+- 移除重复执行`sort_duplicate_limit`
+
+<details>
+  <summary>English</summary>
+
+### 🚀 New Features ###
+
+---
+
+- Added `Channel Alias` feature (`config/alias.txt`) to improve channel name matching.
+- Added `EPG` feature (subscription file configuration `config/epg.txt`) to display channel program information.
+- Support for `Playback Interface` retrieval and generation.
+- Added `historical results` freezing and unfreezing. `Freezing`: Invalid results are excluded from speed testing.
+  `Unfreezing`: Automatically unfreezes and retests when no results are available.
+- Added `Maximum Resolution` limit `min_resolution`.
+- Support for speed testing and generation of interfaces with `Request Headers`. Requires player support for playback
+  and can be controlled via `open_headers`.
+- Added configuration for speed test concurrency `speed_test_limit` to control speed test load pressure.
+- Added `Host Data Sharing` configuration `speed_test_filter_host` to allow interfaces with the same Host address to
+  share speed test results.
+- Added Stream Statistics GUI button.
+
+### 🌟 Optimizations ###
+
+---
+
+- Refactored `Speed Test and Sorting` logic to adapt to more types of interfaces (#1009).
+- Provided `Built-in Results` to address the issue of no results during the first run (may be unstable, recommended to
+  use updated results).
+- Optimized interface speed testing to default to `Full Interface Speed Test`, resolving inaccuracies in speed tests for
+  some interfaces with shared Host results.
+- Adjusted speed test results to sort by `Rate`, with `Resolution` no longer included, resolving the issue of low-rate
+  interfaces appearing at the top.
+- Defaulted to enabling `Streaming`, adjusted `HLS` fragment configuration, and recommended using `HLS` interfaces to
+  alleviate stuttering.
+- Refactored the handling logic for interface `Additional Information`.
+- Renamed speed test-related configuration items to `speed_test_*` and updated output log text.
+- Adjusted the default minimum interface rate to `0.5M/s`.
+- Updated the blacklist to include invalid interfaces and `audio` interfaces.
+
+### 🐛 Bug Fixes ###
+
+---
+
+- Fixed workflow execution issues by switching to the latest `Ubuntu` version (#1032).
+- Fixed the issue where the `M3U` subscription source whitelist was not working (#1019).
+- Fixed speed test issues for some `Multicast Sources` (#1026).
+- Fixed the failure to generate results for interface protocol classification.
+
+### 🗑️ Removals ###
+
+---
+
+- Removed some invalid subscription sources.
+- Removed proxy update feature `open_proxy`.
+- Removed retention mode `open_keep_all`.
+- Removed duplicate execution `sort_duplicate_limit`.
+
+</details>
+
 ## v1.6.3
 
 ### 2025/4/3

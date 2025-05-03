@@ -201,10 +201,6 @@ class ConfigManager:
         return self.config.getboolean("Settings", "open_m3u_result", fallback=True)
 
     @property
-    def open_keep_all(self):
-        return self.config.getboolean("Settings", "open_keep_all", fallback=False)
-
-    @property
     def open_subscribe(self):
         return self.config.getboolean("Settings", f"open_subscribe", fallback=True)
 
@@ -241,6 +237,7 @@ class ConfigManager:
     @property
     def open_method(self):
         return {
+            "epg": self.open_epg,
             "local": self.open_local,
             "subscribe": self.open_subscribe,
             "hotel": self.open_hotel,
@@ -257,8 +254,8 @@ class ConfigManager:
         return self.config.getboolean("Settings", "open_history", fallback=True)
 
     @property
-    def open_sort(self):
-        return self.config.getboolean("Settings", "open_sort", fallback=True)
+    def open_speed_test(self):
+        return self.config.getboolean("Settings", "open_speed_test", fallback=True)
 
     @property
     def open_update_time(self):
@@ -289,12 +286,8 @@ class ConfigManager:
         return self.config.getint("Settings", "request_timeout", fallback=10)
 
     @property
-    def sort_timeout(self):
-        return self.config.getint("Settings", "sort_timeout", fallback=10)
-
-    @property
-    def open_proxy(self):
-        return self.config.getboolean("Settings", "open_proxy", fallback=False)
+    def speed_test_timeout(self):
+        return self.config.getint("Settings", "speed_test_timeout", fallback=10)
 
     @property
     def open_driver(self):
@@ -320,15 +313,15 @@ class ConfigManager:
 
     @property
     def app_host(self):
-        return os.environ.get("APP_HOST") or self.config.get("Settings", "app_host", fallback="http://localhost")
+        return os.getenv("APP_HOST") or self.config.get("Settings", "app_host", fallback="http://localhost")
 
     @property
     def app_port(self):
-        return os.environ.get("APP_PORT") or self.config.getint("Settings", "app_port", fallback=8000)
+        return os.getenv("APP_PORT") or self.config.getint("Settings", "app_port", fallback=8000)
 
     @property
     def open_supply(self):
-        return self.config.getboolean("Settings", "open_supply", fallback=True)
+        return self.config.getboolean("Settings", "open_supply", fallback=False)
 
     @property
     def update_time_position(self):
@@ -351,8 +344,8 @@ class ConfigManager:
         return self.config.getint("Settings", "local_num", fallback=10)
 
     @property
-    def sort_duplicate_limit(self):
-        return self.config.getint("Settings", "sort_duplicate_limit", fallback=1)
+    def speed_test_filter_host(self):
+        return self.config.getboolean("Settings", "speed_test_filter_host", fallback=False)
 
     @property
     def cdn_url(self):
@@ -360,11 +353,19 @@ class ConfigManager:
 
     @property
     def open_rtmp(self):
-        return not os.environ.get("GITHUB_ACTIONS") and self.config.getboolean("Settings", "open_rtmp", fallback=True)
+        return not os.getenv("GITHUB_ACTIONS") and self.config.getboolean("Settings", "open_rtmp", fallback=True)
 
     @property
     def open_headers(self):
         return self.config.getboolean("Settings", "open_headers", fallback=False)
+
+    @property
+    def open_epg(self):
+        return self.config.getboolean("Settings", "open_epg", fallback=True)
+
+    @property
+    def speed_test_limit(self):
+        return self.config.getint("Settings", "speed_test_limit", fallback=10)
 
     def load(self):
         """

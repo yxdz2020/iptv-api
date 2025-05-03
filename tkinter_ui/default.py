@@ -1,5 +1,6 @@
 import os
 import tkinter as tk
+import webbrowser
 from tkinter import filedialog, messagebox, ttk
 
 import utils.constants as constants
@@ -225,41 +226,6 @@ class DefaultUI:
             self.ipv_type_combo.current(2)
         self.ipv_type_combo.bind("<<ComboboxSelected>>", self.update_ipv_type)
 
-        frame_proxy_mode = tk.Frame(root)
-        frame_proxy_mode.pack(fill=tk.X)
-        frame_proxy_mode_params_column1 = tk.Frame(frame_proxy_mode)
-        frame_proxy_mode_params_column1.pack(side=tk.LEFT, fill=tk.Y)
-        frame_proxy_mode_params_column2 = tk.Frame(frame_proxy_mode)
-        frame_proxy_mode_params_column2.pack(side=tk.RIGHT, fill=tk.Y)
-
-        self.open_proxy_label = tk.Label(
-            frame_proxy_mode_params_column1, text="开启代理查询:", width=12
-        )
-        self.open_proxy_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_proxy_var = tk.BooleanVar(value=config.open_proxy)
-        self.open_proxy_checkbutton = ttk.Checkbutton(
-            frame_proxy_mode_params_column1,
-            variable=self.open_proxy_var,
-            onvalue=True,
-            offvalue=False,
-            command=self.update_open_proxy
-        )
-        self.open_proxy_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
-
-        self.open_keep_all_label = tk.Label(
-            frame_proxy_mode_params_column2, text="完整记录:", width=12
-        )
-        self.open_keep_all_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_keep_all_var = tk.BooleanVar(value=config.open_keep_all)
-        self.open_keep_all_checkbutton = ttk.Checkbutton(
-            frame_proxy_mode_params_column2,
-            variable=self.open_keep_all_var,
-            onvalue=True,
-            offvalue=False,
-            command=self.update_open_keep_all
-        )
-        self.open_keep_all_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
-
         frame_m3u = tk.Frame(root)
         frame_m3u.pack(fill=tk.X)
         frame_proxy_m3u_column1 = tk.Frame(frame_m3u)
@@ -445,6 +411,7 @@ class DefaultUI:
             command=self.edit_whitelist_file,
         )
         self.whitelist_file_button.pack(side=tk.LEFT, padx=4, pady=0)
+
         self.url_keywords_blacklist_label = tk.Label(
             frame_default_url_keywords_column2, text="黑名单:", width=12
         )
@@ -455,6 +422,35 @@ class DefaultUI:
             command=self.edit_blacklist_file,
         )
         self.blacklist_file_button.pack(side=tk.LEFT, padx=4, pady=0)
+
+        frame_channel_alias = tk.Frame(root)
+        frame_channel_alias.pack(fill=tk.X)
+        frame_channel_alias_column1 = tk.Frame(frame_channel_alias)
+        frame_channel_alias_column1.pack(side=tk.LEFT, fill=tk.Y)
+        frame_channel_alias_column2 = tk.Frame(frame_channel_alias)
+        frame_channel_alias_column2.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.channel_alias_label = tk.Label(
+            frame_channel_alias_column1, text="频道别名:", width=12
+        )
+        self.channel_alias_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.channel_alias_file_button = tk.ttk.Button(
+            frame_channel_alias_column1,
+            text="编辑",
+            command=self.edit_channel_alias_file,
+        )
+        self.channel_alias_file_button.pack(side=tk.LEFT, padx=4, pady=0)
+
+        self.rtmp_stat_label = tk.Label(
+            frame_channel_alias_column2, text="推流统计:", width=12
+        )
+        self.rtmp_stat_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.rtmp_stat_button = tk.ttk.Button(
+            frame_channel_alias_column2,
+            text="查看",
+            command=self.view_rtmp_stat,
+        )
+        self.rtmp_stat_button.pack(side=tk.LEFT, padx=4, pady=0)
 
     def update_open_update(self):
         config.set("Settings", "open_update", str(self.open_update_var.get()))
@@ -501,12 +497,6 @@ class DefaultUI:
 
     def update_open_driver(self):
         config.set("Settings", "open_driver", str(self.open_driver_var.get()))
-
-    def update_open_proxy(self):
-        config.set("Settings", "open_proxy", str(self.open_proxy_var.get()))
-
-    def update_open_keep_all(self):
-        config.set("Settings", "open_keep_all", str(self.open_keep_all_var.get()))
 
     def update_open_m3u_result(self):
         config.set("Settings", "open_m3u_result", str(self.open_m3u_result_var.get()))
@@ -562,6 +552,12 @@ class DefaultUI:
     def edit_blacklist_file(self):
         self.edit_file(constants.blacklist_path)
 
+    def edit_channel_alias_file(self):
+        self.edit_file(constants.alias_path)
+
+    def view_rtmp_stat(self):
+        webbrowser.open_new_tab("http://localhost:8080/stat")
+
     def change_entry_state(self, state):
         for entry in [
             "open_update_checkbutton",
@@ -572,7 +568,6 @@ class DefaultUI:
             "open_use_cache_checkbutton",
             "open_request_checkbutton",
             "open_driver_checkbutton",
-            "open_proxy_checkbutton",
             "request_timeout_entry",
             "source_file_entry",
             "source_file_button",
@@ -582,7 +577,6 @@ class DefaultUI:
             "final_file_entry",
             "final_file_button",
             "final_file_edit_button",
-            "open_keep_all_checkbutton",
             "open_m3u_result_checkbutton",
             "open_headers_checkbutton",
             "urls_limit_entry",
@@ -594,5 +588,7 @@ class DefaultUI:
             "ipv6_support_checkbutton",
             "whitelist_file_button",
             "blacklist_file_button",
+            "channel_alias_file_button",
+            "rtmp_stat_button",
         ]:
             getattr(self, entry).config(state=state)

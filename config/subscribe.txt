@@ -11,3 +11,5 @@ https://raw.githubusercontent.com/asdjkl6/tv/tv/.m3u/整套直播源/测试/整�
 https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u
 https://raw.githubusercontent.com/vbskycn/iptv/master/tv/iptv6.txt
 https://raw.githubusercontent.com/vbskycn/iptv/master/tv/iptv4.txt
+https://git.acwing.com/Mix2025/v/-/raw/1/9某人自用.txt
+https://git.acwing.com/Mix2025/v/-/raw/1/12十八禁.txt

@@ -65,3 +65,12 @@ jobs:
             git commit -m "Github Action Auto Updated"
             git push --force
           fi
+
+        # 删除旧的工作流运行记录
+      - name: 🎉 Delete old workflow run
+        uses: yxdz2020/delete-workflow-runs@v20250609
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 50

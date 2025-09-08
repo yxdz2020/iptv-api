@@ -49,7 +49,8 @@ class IPChecker:
             if not ip:
                 ip = next((info[4][0] for info in addr_info if info[0] == socket.AF_INET), None)
             ipv_type = "ipv6" if any(info[0] == socket.AF_INET6 for info in addr_info) else "ipv4"
-        except socket.gaierror:
+        except Exception as e:
+            print(f"Error on getting IPv type for {host}: {e}")
             ip = None
             ipv_type = "ipv4"
 

@@ -2,6 +2,8 @@ import asyncio
 import base64
 import gzip
 import json
+import logging
+import math
 import os
 import pickle
 import re
@@ -39,7 +41,8 @@ from utils.tools import (
     get_ip_address,
     convert_to_m3u,
     custom_print,
-    get_name_uri_from_dir, get_resolution_value
+    get_name_uri_from_dir,
+    get_resolution_value
 )
 from utils.types import ChannelData, OriginType, CategoryChannelData, TestResult
 
@@ -836,6 +839,34 @@ def sort_channel_result(channel_data, result=None, filter_host=False, ipv6_suppo
     return channel_result
 
 
+def generate_channel_statistic(logger, cate, name, values):
+    """
+    Generate channel statistic
+    """
+    total = len(values)
+    valid = len([v for v in values if (v.get("speed") or 0) > 0 and (v.get("delay") or -1) != -1])
+    valid_rate = (valid / total * 100) if total > 0 else 0
+    whitelist_count = len([v for v in values if v.get("origin") == "whitelist"])
+    ipv4_count = len([v for v in values if v.get("ipv_type") == "ipv4"])
+    ipv6_count = len([v for v in values if v.get("ipv_type") == "ipv6"])
+    min_delay = min((v.get("delay") for v in values if (v.get("delay") or -1) != -1), default=-1)
+    max_speed = max((v.get("speed") for v in values if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))),
+                    default=0)
+    avg_speed = (
+        sum((v.get("speed") or 0) for v in values if
+            (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))) / valid
+        if valid > 0 else 0
+    )
+    max_resolution = max(
+        (v.get("resolution") for v in values if v.get("resolution")),
+        key=lambda r: get_resolution_value(r),
+        default="None"
+    )
+    content = f"Category: {cate}, Name: {name}, Total: {total}, Valid: {valid}, Valid Percent: {valid_rate:.2f}%, Whitelist: {whitelist_count}, IPv4: {ipv4_count}, IPv6: {ipv6_count}, Min Delay: {min_delay} ms, Max Speed: {max_speed:.2f} M/s, Avg Speed: {avg_speed:.2f} M/s, Max Resolution: {max_resolution}"
+    print(f"\n{content}")
+    logger.info(content)
+
+
 def process_write_content(
         path: str,
         data: CategoryChannelData,
@@ -847,7 +878,8 @@ def process_write_content(
         ipv_type_prefer: list[str] = None,
         origin_type_prefer: list[str] = None,
         first_channel_name: str = None,
-        enable_print: bool = False
+        enable_log: bool = False,
+        logger: logging.Logger = None
 ):
     """
     Get channel write content
@@ -865,22 +897,18 @@ def process_write_content(
     no_result_name = []
     first_cate = True
     result_data = defaultdict(list)
-    custom_print.disable = not enable_print
+    custom_print.disable = not enable_log
     rtmp_url = live_url if live else hls_url if hls else None
     rtmp_type = ["live", "hls"] if live and hls else ["live"] if live else ["hls"] if hls else []
     open_url_info = config.open_url_info
     for cate, channel_obj in data.items():
-        custom_print(f"\n{cate}:", end=" ")
         content += f"{'\n\n' if not first_cate else ''}{cate},#genre#"
         first_cate = False
         channel_obj_keys = channel_obj.keys()
-        names_len = len(list(channel_obj_keys))
         for i, name in enumerate(channel_obj_keys):
             info_list = data.get(cate, {}).get(name, [])
             channel_urls = get_total_urls(info_list, ipv_type_prefer, origin_type_prefer, rtmp_type)
             result_data[name].extend(channel_urls)
-            end_char = ", " if i < names_len - 1 else ""
-            custom_print(f"{name}:", len(channel_urls), end=end_char)
             if not channel_urls:
                 if open_empty_category:
                     no_result_name.append(name)
@@ -897,7 +925,8 @@ def process_write_content(
                     item_url = add_url_info(item_url, item["extra_info"])
                 total_item_url = f"{rtmp_url or item_rtmp_url}{item['id']}" if rtmp_url or item_rtmp_url else item_url
                 content += f"\n{name},{total_item_url}"
-        custom_print()
+            if enable_log:
+                generate_channel_statistic(logger, cate, name, info_list)
     if open_empty_category and no_result_name:
         custom_print("\n🈳 No result channel name:")
         content += "\n\n🈳无结果频道,#genre#"
@@ -905,7 +934,6 @@ def process_write_content(
             end_char = ", " if i < len(no_result_name) - 1 else ""
             custom_print(name, end=end_char)
             content += f"\n{name},url"
-        custom_print()
     if config.open_update_time:
         update_time_item = next(
             (urls[0] for channel_obj in data.values()
@@ -971,6 +999,7 @@ def write_channel_to_file(data, epg=None, ipv6=False, first_channel_name=None):
         address = get_ip_address()
         live_url = f"{address}/live/"
         hls_url = f"{address}/hls/"
+        logger = get_logger(constants.statistic_log_path, level=INFO, init=True)
         file_list = [
             {"path": config.final_file, "enable_log": True},
             {"path": constants.ipv4_result_path, "ipv_type_prefer": ["ipv4"]},
@@ -1013,8 +1042,10 @@ def write_channel_to_file(data, epg=None, ipv6=False, first_channel_name=None):
                 ipv_type_prefer=file.get("ipv_type_prefer", ipv_type_prefer),
                 origin_type_prefer=origin_type_prefer,
                 first_channel_name=first_channel_name,
-                enable_print=file.get("enable_log", False),
+                enable_log=file.get("enable_log", False),
+                logger=logger
             )
+        logger.handlers.clear()
         print("✅ Write channel to file success")
     except Exception as e:
         print(f"❌ Write channel to file failed: {e}")

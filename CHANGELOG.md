@@ -1,5 +1,84 @@
 # 更新日志（Changelog）
 
+## v1.7.3
+
+### 2025/10/15
+
+### 🚀 新功能 ###
+
+---
+
+- 新增支持别名使用正则表达式（#1135）
+- 新增支持配置台标库地址`logo_url`，台标文件类型`logo_type`
+- 新增支持Docker使用环境变量修改`config.ini`中的配置参数（#1204）
+- 新增频道结果统计日志`output/statistic.log`，记录频道接口有效率、关键测速数据等信息（#1200）
+- 新增未匹配频道数据日志`output/nomatch.log`，记录未匹配的频道名称与接口信息（#1200）
+- 新增测速结果日志`output/speed_test.log`，记录所有参与测速接口数据（#1145）
+
+### 🌟 优化 ###
+
+---
+
+- 优化频道缓存结果解冻策略
+- 更新纯真IP数据库
+- 增加`吉林联通`组播IP（#1107），更新`贵州电信`组播IP（@wangyi1573）
+- 更新默认订阅源，移除无效源（#1136，#1114)
+- 更新频道别名数据
+- 补充README配置文件路径说明，增加目录文件说明（#1204）
+
+### 🐛 修复 ###
+
+---
+
+- 修复Docker `APP_HOST` 环境变量不生效（#1094）
+- 修复EPG节目单无法显示（#1099）
+- 修复配置订阅源白名单更新结果出现重复接口（#1113）
+- 修复本地源不支持别名（#1147）
+- 修复特定场景下频道结果缓存解冻失败
+- 修复部分白名单接口未能成功保留至最终结果（#1158，#1133）
+- 修复CCTV-4频道数据源问题（#1164）
+
+<details>
+  <summary>English</summary>
+
+### 🚀 New Features ###
+
+---
+
+- Added support for using regular expressions in aliases (#1135)
+- Added support for configuring logo library address `logo_url` and logo file type `logo_type`
+- Added support for modifying configuration parameters in `config.ini` via Docker environment variables (#1204)
+- Added channel result statistics log `output/statistic.log`, recording channel interface validity rate and key speed
+  test data (#1200)
+- Added unmatched channel data log `output/nomatch.log`, recording unmatched channel names and interface information (
+  #1200)
+- Added speed test result log `output/speed_test.log`, recording all participating speed test interface data (#1145)
+
+### 🌟 Optimization ###
+
+---
+
+- Optimize the strategy for unfreezing channel cache results
+- Update the QQWry IP database
+- Added `Jilin Unicom` multicast IP (#1107), updated `Guizhou Telecom` multicast IP (@wangyi1573)
+- Updated default subscription sources, removed invalid sources (#1136, #1114)
+- Updated channel alias data
+- Supplemented README with configuration file path instructions and added directory file descriptions (#1204)
+
+### 🐛 Bug Fixes ###
+
+---
+
+- Fixed Docker `APP_HOST` environment variable not taking effect (#1094)
+- Fixed EPG program list not displaying (#1099)
+- Fixed duplicate interfaces in subscription source whitelist update results (#1113)
+- Fixed local sources not supporting aliases (#1147)
+- Fixed channel result cache thaw failure in specific scenarios
+- Fixed some whitelist interfaces not being successfully retained in the final result (#1158, #1133)
+- Fixed CCTV-4 channel data source issue (#1164)
+
+</details>
+
 ## v1.7.2
 
 ### 2025/5/26

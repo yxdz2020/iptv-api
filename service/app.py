@@ -182,7 +182,7 @@ def show_epg_gz():
 
 
 @app.route("/log/result")
-def show_log():
+def show_result_log():
     if os.path.exists(constants.result_log_path):
         with open(constants.result_log_path, "r", encoding="utf-8") as file:
             content = file.read()
@@ -194,9 +194,33 @@ def show_log():
 
 
 @app.route("/log/speed-test")
-def show_log():
+def show_speed_log():
     if os.path.exists(constants.speed_test_log_path):
         with open(constants.speed_test_log_path, "r", encoding="utf-8") as file:
+            content = file.read()
+    else:
+        content = constants.waiting_tip
+    response = make_response(content)
+    response.mimetype = "text/plain"
+    return response
+
+
+@app.route("/log/statistic")
+def show_statistic_log():
+    if os.path.exists(constants.statistic_log_path):
+        with open(constants.statistic_log_path, "r", encoding="utf-8") as file:
+            content = file.read()
+    else:
+        content = constants.waiting_tip
+    response = make_response(content)
+    response.mimetype = "text/plain"
+    return response
+
+
+@app.route("/log/nomatch")
+def show_nomatch_log():
+    if os.path.exists(constants.nomatch_log_path):
+        with open(constants.nomatch_log_path, "r", encoding="utf-8") as file:
             content = file.read()
     else:
         content = constants.waiting_tip

@@ -33,6 +33,7 @@
 - [🔗 最新结果](#最新结果)
 - [⚙️ 配置参数](#配置)
 - [🚀 快速上手](#快速上手)
+    - [目录说明](#目录说明)
     - [工作流](#工作流)
     - [命令行](#命令行)
     - [GUI软件](#GUI-软件)
@@ -72,11 +73,12 @@
 | 功能           | 支持状态 | 说明                                           |
 |:-------------|:----:|:---------------------------------------------|
 | **自定义模板**    |  ✅   | 生成您想要的个性化频道                                  |
-| **频道别名**     |  ✅   | 提升频道结果获取量与准确率                                |
+| **频道别名**     |  ✅   | 提升频道结果获取量与准确率，支持正则表达式                        |
 | **多种源获取方式**  |  ✅   | 支持本地源、组播源、酒店源、订阅源、关键字搜索                      |
 | **RTMP推流**   |  ✅   | 支持Live与HLS模式，提升直播播放体验                        |
 | **回放类接口**    |  ✅   | 支持回放类接口的获取与生成                                |
 | **EPG电子节目单** |  ✅   | 显示频道预告内容                                     |
+| **频道台标**     |  ✅   | 支持自定义频道台标库来源                                 |
 | **接口测速验效**   |  ✅   | 获取延迟、速率、分辨率，并过滤无效接口                          |
 | **高级偏好设置**   |  ✅   | IPv4/IPv6、接口排序优先级、数量配置、黑白名单、归属地与运营商过滤        |
 | **定时任务**     |  ✅   | 默认北京时间每日 6:00 与 18:00 自动更新，可自定义时间或间歇更新       |
@@ -116,12 +118,15 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 
 ## 配置
 
+> [!NOTE]\
+> 以下配置项位于`config/config.ini`文件中，支持通过配置文件或环境变量(配置项同名)实现修改，修改保存后重启即可生效
+
 | 配置项                    | 描述                                                                                                                                                                    | 默认值               |
 |:-----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
 | open_driver            | 开启浏览器运行，若更新无数据可开启此模式，较消耗性能                                                                                                                                            | False             |
 | open_epg               | 开启EPG功能，支持频道显示预告内容                                                                                                                                                    | True              |
 | open_empty_category    | 开启无结果频道分类，自动归类至底部                                                                                                                                                     | False             |
-| open_filter_resolution | 开启分辨率过滤，低于最小分辨率（min_resolution）的接口将会被过滤，GUI用户需要手动安装FFmpeg，程序会自动调用FFmpeg获取接口分辨率，推荐开启，虽然会增加测速阶段耗时，但能更有效地区分是否可播放的接口                                                      | True              |
+| open_filter_resolution | 开启分辨率过滤，低于最小分辨率（min_resolution）的接口将会被过滤，GUI用户需要手动安装FFmpeg，程序会自动调用FFmpeg获取接口分辨率，推荐开启，虽然会增加测速阶段耗时，但能更有效地区分是否可播放的接口                                                      | True              |                                                                                                                                                    |
 | open_filter_speed      | 开启速率过滤，低于最小速率（min_speed）的接口将会被过滤                                                                                                                                      | True              |
 | open_hotel             | 开启酒店源功能，关闭后所有酒店源工作模式都将关闭                                                                                                                                              | False             |
 | open_hotel_foodie      | 开启 Foodie 酒店源工作模式                                                                                                                                                     | True              |
@@ -159,6 +164,8 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 | location               | 接口归属地，用于控制结果只包含填写的归属地类型，支持关键字过滤，英文逗号分隔，不填写表示不指定归属地，建议使用靠近使用者的归属地，能提升播放体验                                                                                              |                   |
 | local_file             | 本地源文件路径                                                                                                                                                               | config/local.txt  |
 | local_num              | 结果中偏好的本地源接口数量                                                                                                                                                         | 10                |
+| logo_url               | 频道台标库地址                                                                                                                                                               |                   |
+| logo_type              | 频道台标文件类型                                                                                                                                                              | png               |
 | min_resolution         | 接口最小分辨率，需要开启 open_filter_resolution 才能生效                                                                                                                              | 1920x1080         |
 | max_resolution         | 接口最大分辨率，需要开启 open_filter_resolution 才能生效                                                                                                                              | 1920x1080         |
 | min_speed              | 接口最小速率（单位M/s），需要开启 open_filter_speed 才能生效                                                                                                                             | 0.5               |
@@ -178,9 +185,38 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 | time_zone              | 时区，可用于控制更新时间显示的时区，可选值：Asia/Shanghai 或其它时区编码                                                                                                                           | Asia/Shanghai     |
 | urls_limit             | 单个频道接口数量                                                                                                                                                              | 10                |
 | update_interval        | 定时执行更新时间间隔，单位小时，设置0或空则只运行一次，不作用于工作流                                                                                                                                   | 12                |
-| update_time_position   | 更新时间显示位置，需要开启 open_update_time 才能生效，可选值：top、bottom，top: 显示于结果顶部，bottom: 显示于结果底部                                                                                       | top               |
+| update_time_position   | 更新时间显示位置，需要开启 open_update_time 才能生效，可选值：top、bottom，top:显示于结果顶部，bottom: 显示于结果底部                                                                                        | top               |
 
 ## 快速上手
+
+### 目录说明
+
+| 目录路径                      | 说明                  |
+|:--------------------------|:--------------------|
+| config                    | 配置文件目录，包含配置文件、模板文件等 |
+| config/config.ini         | 配置参数文件              |
+| config/rtp                | 各地区运营商组播源ip         |
+| config/demo.txt           | 频道模板                |
+| config/alias.txt          | 频道别名                |
+| config/blacklist.txt      | 接口黑名单               |
+| config/whitelist.txt      | 接口白名单               |
+| config/subscribe.txt      | 频道订阅源列表             |
+| config/local.txt          | 本地源文件               |
+| config/epg.txt            | EPG订阅源列表            |
+| output                    | 结果文件目录，包含生成的结果文件等   |
+| output/data               | 结果数据缓存目录            |
+| output/epg                | EPG结果目录             |
+| output/ipv4               | IPv4结果目录            |
+| output/ipv6               | IPv6结果目录            |
+| output/result(.m3u/txt)   | m3u/txt结果           |
+| output/live(.m3u/txt)     | RTMP推流live结果        |
+| output/hls(.m3u/txt)      | RTMP推流hls结果         |
+| output/log                | 日志文件目录              |
+| output/log/result.log     | 有效结果日志              |
+| output/log/speed_test.log | 测速日志                |
+| output/log/statistic.log  | 统计结果日志              |
+| output/log/nomatch.log    | 未匹配频道记录             |
+| source.json               | 点播源配置文件             |
 
 ### 工作流
 
@@ -274,6 +310,8 @@ docker run -d -p 8000:8000 guovern/iptv-api
 | /content        | 接口文本内容      |
 | /log/result     | 有效结果的日志     |
 | /log/speed-test | 所有参与测速接口的日志 |
+| /log/statistic  | 统计结果的日志     |
+| /log/nomatch    | 未匹配频道的日志    |
 
 - RTMP 推流：
 

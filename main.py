@@ -20,7 +20,8 @@ from utils.channel import (
     get_channel_items,
     append_total_data,
     test_speed,
-    write_channel_to_file, sort_channel_result,
+    write_channel_to_file,
+    sort_channel_result
 )
 from utils.config import config
 from utils.tools import (

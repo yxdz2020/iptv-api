@@ -34,6 +34,7 @@ other features, under development...
 - [🔗 Latest results](#latest-results)
 - [⚙️ Config parameter](#Config)
 - [🚀 Quick Start](#quick-start)
+    - [Directory Description](#directory-description)
     - [Workflow](#workflow)
     - [Command Line](#command-line)
     - [GUI Software](#gui-software)
@@ -74,11 +75,12 @@ other features, under development...
 | Feature                               | Status | Description                                                                                                |
 |:--------------------------------------|:------:|:-----------------------------------------------------------------------------------------------------------|
 | **Custom Templates**                  |   ✅    | Generate personalized channels as you wish                                                                 |
-| **Channel Aliases**                   |   ✅    | Improve channel result acquisition and accuracy                                                            |
+| **Channel Alias**                     |   ✅    | Improves channel result coverage and accuracy, supports regular expressions                                |
 | **Multiple Source Types**             |   ✅    | Supports local sources, multicast, hotel sources, subscriptions, and keyword search                        |
 | **RTMP Streaming**                    |   ✅    | Supports Live and HLS modes to enhance live playback experience                                            |
 | **Playback Interfaces**               |   ✅    | Supports acquisition and generation of playback interfaces                                                 |
 | **EPG (Electronic Program Guide)**    |   ✅    | Displays channel preview content                                                                           |
+| **Channel Logo**                      |   ✅    | Supports custom channel logo library sources                                                               |
 | **Interface Speed Test & Validation** |   ✅    | Measures latency, speed, resolution, and filters invalid interfaces                                        |
 | **Advanced Preferences**              |   ✅    | IPv4/IPv6, interface sorting priority, quantity configuration, blacklist/whitelist, region & ISP filtering |
 | **Scheduled Tasks**                   |   ✅    | Automatically updates at 6:00 and 18:00 Beijing time daily by default; customizable schedule               |
@@ -118,6 +120,10 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 ```
 
 ## Config
+
+> [!NOTE]\
+> The following configuration items are located in the `config/config.ini` file. You can modify them via the
+> configuration file or environment variables (with the same item name). After saving changes, restart to take effect.
 
 | Configuration Item     | Description                                                                                                                                                                                                                                                                                                                                                                                                                      | Default Value     |
 |:-----------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
@@ -162,6 +168,8 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 | location               | Interface location, used to control the result to only include the filled location type, supports keyword filtering, separated by English commas, not filled in means no location specified, it is recommended to use the location close to the user, which can improve the playback experience                                                                                                                                  |                   |
 | local_file             | Local source file path                                                                                                                                                                                                                                                                                                                                                                                                           | config/local.txt  |
 | local_num              | Preferred number of local source interfaces in the result                                                                                                                                                                                                                                                                                                                                                                        | 10                |
+| logo_url               | Channel logo library URL address                                                                                                                                                                                                                                                                                                                                                                                                 |                   |
+| logo_type              | Channel logo file type                                                                                                                                                                                                                                                                                                                                                                                                           | png               |
 | min_resolution         | Minimum interface resolution, requires enabling open_filter_resolution to take effect                                                                                                                                                                                                                                                                                                                                            | 1920x1080         |
 | max_resolution         | Maximum interface resolution, requires enabling open_filter_resolution to take effect                                                                                                                                                                                                                                                                                                                                            | 1920x1080         |
 | min_speed              | Minimum interface speed (M/s), requires enabling open_filter_speed to take effect                                                                                                                                                                                                                                                                                                                                                | 0.5               |
@@ -184,6 +192,35 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 | update_time_position   | Update time display position, need to enable open_update_time to take effect, optional values: top, bottom, top: display at the top of the result, bottom: display at the bottom of the result                                                                                                                                                                                                                                   | top               |
 
 ## Quick Start
+
+### Directory Description
+
+| Directory Path            | Description                                                           |
+|:--------------------------|:----------------------------------------------------------------------|
+| config                    | Configuration files directory, includes config files, templates, etc. |
+| config/config.ini         | Configuration parameters file                                         |
+| config/rtp                | Multicast IPs for each region/operator                                |
+| config/demo.txt           | Channel template                                                      |
+| config/alias.txt          | Channel aliases                                                       |
+| config/blacklist.txt      | Interface blacklist                                                   |
+| config/whitelist.txt      | Interface whitelist                                                   |
+| config/subscribe.txt      | Channel subscription sources list                                     |
+| config/local.txt          | Local source file                                                     |
+| config/epg.txt            | EPG subscription sources list                                         |
+| output                    | Output files directory, includes generated result files, etc.         |
+| output/data               | Result data cache directory                                           |
+| output/epg                | EPG result directory                                                  |
+| output/ipv4               | IPv4 result directory                                                 |
+| output/ipv6               | IPv6 result directory                                                 |
+| output/result(.m3u/txt)   | m3u/txt result                                                        |
+| output/live(.m3u/txt)     | RTMP live stream result                                               |
+| output/hls(.m3u/txt)      | RTMP hls stream result                                                |
+| output/log                | Log files directory                                                   |
+| output/log/result.log     | Valid result log                                                      |
+| output/log/speed_test.log | Speed test log                                                        |
+| output/log/statistic.log  | Statistics result log                                                 |
+| output/log/nomatch.log    | Unmatched channel records                                             |
+| source.json               | VOD source configuration file                                         |
 
 ### Workflow
 
@@ -280,6 +317,8 @@ Taking the host path /etc/docker as an example:
 | /content        | Endpoint content                                |
 | /log/result     | Log of valid results                            |
 | /log/speed-test | Log of all interfaces involved in speed testing |
+| /log/statistic  | Log of statistics results                       |
+| /log/nomatch    | Log of unmatched channels                       |
 
 - RTMP Streaming:
 

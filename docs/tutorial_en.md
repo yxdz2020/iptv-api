@@ -379,6 +379,8 @@ Taking the host path /etc/docker as an example:
 | /content        | Endpoint content                                |
 | /log/result     | Log of valid results                            |
 | /log/speed-test | Log of all interfaces involved in speed testing |
+| /log/statistic  | Log of statistics results                       |
+| /log/nomatch    | Log of unmatched channels                       |
 
 - RTMP Streaming:
 

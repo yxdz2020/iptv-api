@@ -47,12 +47,16 @@ speed_test_log_path = os.path.join(output_dir, "log/speed_test.log")
 
 result_log_path = os.path.join(output_dir, "log/result.log")
 
+statistic_log_path = os.path.join(output_dir, "log/statistic.log")
+
+nomatch_log_path = os.path.join(output_dir, "log/nomatch.log")
+
 log_path = os.path.join(output_dir, "log/log.log")
 
 url_host_pattern = re.compile(r"((https?|rtmp|rtsp)://)?([^:@/]+(:[^:@/]*)?@)?(\[[0-9a-fA-F:]+]|([\w-]+\.)+[\w-]+)")
 
 url_pattern = re.compile(
-    r"(?P<url>" + url_host_pattern.pattern + r"(?:\S*?(?=\?$|\?\$|$)|[^\s?]*))")
+    r"(?P<url>" + url_host_pattern.pattern + r"\S*)")
 
 rt_url_pattern = re.compile(r"^(rtmp|rtsp)://.*$")
 
@@ -128,4 +132,4 @@ foodie_url = "http://www.foodieguide.com/iptvsearch/"
 
 foodie_hotel_url = "http://www.foodieguide.com/iptvsearch/hoteliptv.php"
 
-waiting_tip = "🔍️未找到结果文件，若已启动更新，请耐心等待更新完成..."
+waiting_tip = "📄结果将在更新完成后生成，请耐心等待..."

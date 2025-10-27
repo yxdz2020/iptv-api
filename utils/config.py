@@ -39,6 +39,7 @@ class ConfigManager:
     def __init__(self):
         self.config = None
         self.load()
+        self.override_config_with_env()
 
     def __getattr__(self, name, *args, **kwargs):
         return getattr(self.config, name, *args, **kwargs)
@@ -391,6 +392,14 @@ class ConfigManager:
     def update_interval(self):
         return self.config.getfloat("Settings", "update_interval", fallback=12)
 
+    @property
+    def logo_url(self):
+        return self.config.get("Settings", "logo_url", fallback="")
+
+    @property
+    def logo_type(self):
+        return self.config.get("Settings", "logo_type", fallback="png")
+
     def load(self):
         """
         Load the config
@@ -405,6 +414,13 @@ class ConfigManager:
             if os.path.exists(config_file):
                 with open(config_file, "r", encoding="utf-8") as f:
                     self.config.read_file(f)
+
+    def override_config_with_env(self):
+        for section in self.config.sections():
+            for key in self.config[section]:
+                env_val = os.getenv(key)
+                if env_val is not None:
+                    self.config.set(section, key, env_val)
 
     def set(self, section, key, value):
         """

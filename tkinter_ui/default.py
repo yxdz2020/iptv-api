@@ -403,6 +403,35 @@ class DefaultUI:
         self.cdn_url_entry.insert(0, config.cdn_url)
         self.cdn_url_entry.bind("<KeyRelease>", self.update_cdn_url)
 
+        frame_channel_logo = tk.Frame(root)
+        frame_channel_logo.pack(fill=tk.X)
+        frame_channel_logo_column1 = tk.Frame(
+            frame_channel_logo
+        )
+        frame_channel_logo_column1.pack(side=tk.LEFT, fill=tk.Y)
+        frame_channel_logo_column2 = tk.Frame(
+            frame_channel_logo
+        )
+        frame_channel_logo_column2.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.logo_url_label = tk.Label(
+            frame_channel_logo_column1, text="台标库地址:", width=12
+        )
+        self.logo_url_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.logo_url_entry = tk.Entry(frame_channel_logo_column1, width=36)
+        self.logo_url_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.logo_url_entry.insert(0, config.logo_url)
+        self.logo_url_entry.bind("<KeyRelease>", self.update_logo_url)
+
+        self.logo_type_label = tk.Label(
+            frame_channel_logo_column2, text="台标文件类型:", width=12
+        )
+        self.logo_type_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.logo_type_entry = tk.Entry(frame_channel_logo_column2, width=8)
+        self.logo_type_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.logo_type_entry.insert(0, config.logo_type)
+        self.logo_type_entry.bind("<KeyRelease>", self.update_logo_type)
+
         frame_default_url_keywords = tk.Frame(root)
         frame_default_url_keywords.pack(fill=tk.X)
         frame_default_url_keywords_column1 = tk.Frame(frame_default_url_keywords)
@@ -528,6 +557,12 @@ class DefaultUI:
     def update_cdn_url(self, event):
         config.set("Settings", "cdn_url", self.cdn_url_entry.get())
 
+    def update_logo_url(self, event):
+        config.set("Settings", "logo_url", self.logo_url_entry.get())
+
+    def update_logo_type(self, event):
+        config.set("Settings", "logo_type", self.logo_type_entry.get())
+
     def update_open_update_time(self):
         config.set("Settings", "open_update_time", str(self.open_update_time_var.get()))
 
@@ -587,6 +622,8 @@ class DefaultUI:
             "source_file_edit_button",
             "time_zone_entry",
             "cdn_url_entry",
+            "logo_url_entry",
+            "logo_type_entry",
             "final_file_entry",
             "final_file_button",
             "final_file_edit_button",

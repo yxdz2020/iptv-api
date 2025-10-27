@@ -1,5 +1,6 @@
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from logging import INFO
 from time import time
 
 from requests import Session, exceptions
@@ -12,7 +13,8 @@ from utils.retry import retry_func
 from utils.tools import (
     merge_objects,
     get_pbar_remaining,
-    get_name_url
+    get_name_url,
+    get_logger
 )
 
 
@@ -45,6 +47,7 @@ async def get_channels_by_subscribe_urls(
             0,
         )
     hotel_name = constants.origin_map["hotel"]
+    logger = get_logger(constants.nomatch_log_path, level=INFO, init=True)
 
     def process_subscribe_channels(subscribe_info: str | dict) -> defaultdict:
         region = ""
@@ -92,6 +95,7 @@ async def get_channels_by_subscribe_urls(
                     if name and url:
                         name = format_channel_name(name)
                         if names and name not in names:
+                            logger.info(f"{item["name"]},{item["url"]}")
                             continue
                         url_partition = url.partition("$")
                         url = url_partition[0]
@@ -121,6 +125,7 @@ async def get_channels_by_subscribe_urls(
                 print(f"Error on {subscribe_url}: {e}")
         finally:
             session.close()
+            logger.handlers.clear()
             pbar.update()
             remain = subscribe_urls_len - pbar.n
             if callback:

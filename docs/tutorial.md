@@ -323,6 +323,8 @@ docker run -d -p 8000:8000 guovern/iptv-api
 | APP_HOST | 服务host地址 | "http://localhost" |
 | APP_PORT | 服务端口     | 8000               |
 
+除了以上环境变量，还支持通过环境变量覆盖配置文件中的[配置项](./config.md)
+
 ### 3. 更新结果
 
 | 接口              | 描述          |

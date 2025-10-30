@@ -418,9 +418,13 @@ class ConfigManager:
     def override_config_with_env(self):
         for section in self.config.sections():
             for key in self.config[section]:
-                env_val = os.getenv(key)
-                if env_val is not None:
-                    self.config.set(section, key, env_val)
+                section_key = f"{section}_{key}"
+                candidates = (key, key.upper(), section_key, section_key.upper())
+                for env_name in candidates:
+                    env_val = os.getenv(env_name)
+                    if env_val is not None:
+                        self.config.set(section, key, env_val)
+                        break
 
     def set(self, section, key, value):
         """

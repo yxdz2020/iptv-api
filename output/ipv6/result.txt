@@ -1,5 +1,5 @@
 🕘️更新时间,#genre#
-2025-10-31 06:23:48,http://php.jdshipin.com/TVOD/iptv.php?id=rthk33
+2025-10-31 18:25:53,http://php.jdshipin.com/TVOD/iptv.php?id=rthk33
 
 📺央视频道,#genre#
 CCTV-1,http://php.jdshipin.com/TVOD/iptv.php?id=rthk33
@@ -1403,7 +1403,9 @@ CETV-4,http://gslbmgsplive.miguvideo.com/migu/kailu/cetv4/50/20240709/index.m3u8
 金鹰纪实,http://[2409:8087:3869:8021:1001::e5]:6610/PLTV/88888910/224/3221225595/index.m3u8?fmt=ts2hls
 湖南金鹰纪实,http://yc.myds.me:35455/itv/5000000011000031203.m3u8?cdn=bestzb
 湖南金鹰纪实,http://nas.suntao.online:35455/itv/5000000011000031203.m3u8?cdn=bestzb
+湖南金鹰纪实,https://stream1.freetv.fun/jin-ying-ji-shi-23.m3u8
 长沙新闻综合,http://ls.qingting.fm/live/4877.m3u8
+长沙新闻,http://ls.qingting.fm/live/4877.m3u8
 
 ☘️湖北频道,#genre#
 湖北综合,http://[2409:8087:4c0a:22:1::11]:6410/170000001115/UmaiCHAN638072216f7da/index.m3u8?AuthInfo=9kOOdBn7MFF%2F2bWjKgahUUAdKgLqNB5aOAUhcp5CeNLx3R3LdIBdA5q61lut1LwZcw4SC2tJubc%2Bq5t%2F61jvWCtjrJL0x%2BHncPgdmcbBW9I
@@ -1955,6 +1957,7 @@ CETV-4,http://gslbmgsplive.miguvideo.com/migu/kailu/cetv4/50/20240709/index.m3u8
 济南综合,https://stream1.freetv.fun/ji-nan-zong-he-3.m3u8
 济南综合,https://stream1.freetv.fun/ji-nan-zong-he-1.m3u8
 济南新闻综合,https://stream1.freetv.fun/ji-nan-xin-wen-zong-he-7.m3u8
+济南新闻综合,https://stream1.freetv.fun/ji-nan-zong-he-2.m3u8
 济南教育,https://stream1.freetv.fun/ji-nan-jiao-yu-1.m3u8
 日照公共,http://live.rzw.com.cn/kzpd/sd/live.m3u8?shandd
 日照新闻综合,http://live.rzw.com.cn/xwzh/sd/live.m3u8?shandd

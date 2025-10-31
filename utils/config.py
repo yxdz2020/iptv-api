@@ -2,6 +2,7 @@ import configparser
 import os
 import re
 import shutil
+import socket
 import sys
 
 
@@ -314,7 +315,27 @@ class ConfigManager:
 
     @property
     def app_host(self):
-        return os.getenv("APP_HOST") or self.config.get("Settings", "app_host", fallback="http://localhost")
+        env = os.getenv("APP_HOST")
+        if env:
+            return env
+        cfg = self.config.get("Settings", "app_host", fallback="http://localhost")
+        if cfg and cfg != "http://localhost":
+            return cfg
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            try:
+                s.connect(("8.8.8.8", 80))
+                ip = s.getsockname()[0]
+            finally:
+                s.close()
+            if ip and not ip.startswith("127."):
+                scheme = "http"
+                if "://" in cfg:
+                    scheme = cfg.split("://", 1)[0]
+                return f"{scheme}://{ip}"
+        except Exception:
+            pass
+        return cfg
 
     @property
     def app_port(self):

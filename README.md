@@ -369,7 +369,7 @@ docker run -d -p 8000:8000 guovern/iptv-api
 
 ## Star统计
 
-[![Star统计](https://api.star-history.com/svg?repos=Guovin/iptv-api&type=Date)](https://star-history.com/#Guovin/iptv-api&Date)
+[![Star统计](https://starchart.cc/Guovin/iptv-api.svg?variant=adaptive)](https://starchart.cc/Guovin/iptv-api)
 
 ## 捐赠
 
@@ -394,6 +394,7 @@ docker run -d -p 8000:8000 guovern/iptv-api
 | **彬           | 支付宝 |    |                 | 30   |
 | 戒烟            | 公众号 |    | 大佬辛苦了           | 25   |
 | 搂着猫的老鼠        | 公众号 |    | 受教了，非常感谢您的付出    | 25   |
+| pakysr        | 赞赏码 |    |                 | 20   |
 | 随波            | 公众号 |    |                 | 20   |
 | 公子            | 公众号 |    |                 | 20   |
 | 迎着风雨成长        | 公众号 |    |                 | 20   |

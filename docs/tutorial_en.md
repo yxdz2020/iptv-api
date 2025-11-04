@@ -7,8 +7,8 @@
   <h1 align="center">IPTV-API</h1>
 </div>
 
-📺IPTV automatic live-source updater with ✨fully automated collection, filtering and speed-testing workflow 🚀 — supports
-extensive customization; load the generated results into your player to watch.
+📺 IPTV live-source auto-update platform — 🤖 fully automated collection, filtering, speed-testing, and generation
+pipeline 🚀. Supports extensive customization; paste the resulting URL into your player to watch
 
 There are four installation and operation methods in total, choose the one that suits you.
 
@@ -113,7 +113,7 @@ Like editing templates, modify the runtime configuration.
 ![Edit source_file configuration](./images/edit-user-source-file.png 'Edit source_file configuration')
 
 Adjust the configuration as needed, here is the default configuration description:
-[Configuration parameters](./config.md)
+[Configuration parameters](./config_en.md)
 
 > [!NOTE]
 > 1. For enabling interface information display, since some players (such as `PotPlayer`) do not support parsing
@@ -362,10 +362,14 @@ Taking the host path /etc/docker as an example:
 
 #### Environment Variables:
 
-| Variable | Description          | Default Value      |
-|:---------|:---------------------|:-------------------|
-| APP_HOST | Service host address | "http://localhost" |
-| APP_PORT | Service port         | 8000               |
+| Variable | Description          | Default Value    |
+|:---------|:---------------------|:-----------------|
+| APP_HOST | Service host address | Local machine IP |
+| APP_PORT | Service port         | 8000             |
+
+In addition to the environment variables listed above, you can also override the [configuration items](./config_en.md)
+in the
+configuration file via environment variables.
 
 ### 3. Update Results
 

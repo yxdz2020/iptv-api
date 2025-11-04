@@ -3,7 +3,7 @@
   <h1 align="center">IPTV-API</h1>
 </div>
 
-📺IPTV直播源自动更新平台，『✨全自动化采集、筛选、测速流程🚀』，支持丰富的个性化配置，生成结果输入播放器即可观看
+📺IPTV直播源自动更新平台，『🤖全自动采集、筛选、测速、生成流程🚀』，支持丰富的个性化配置，将结果地址输入播放器即可观看
 
 <p align="center">
   <br>
@@ -42,16 +42,16 @@
 - [🔗 最新结果](#最新结果)
 - [⚙️ 配置参数](#配置)
 - [🚀 快速上手](#快速上手)
-    - [目录说明](#目录说明)
+    - [配置与结果目录](#配置与结果目录)
     - [工作流](#工作流)
     - [命令行](#命令行)
     - [GUI软件](#GUI-软件)
     - [Docker](#Docker)
 - [📖 详细教程](./docs/tutorial.md)
 - [🗓️ 更新日志](./CHANGELOG.md)
-- [❤️ 赞赏](#赞赏)
-- [👀 关注公众号](#关注)
+- [👀 关注](#关注)
 - [⭐️ Star统计](#Star统计)
+- [❤️ 捐赠](#捐赠)
 - [📣 免责声明](#免责声明)
 - [⚖️ 许可证](#许可证)
 
@@ -128,7 +128,7 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 ## 配置
 
 > [!NOTE]\
-> 以下配置项位于`config/config.ini`文件中，支持通过配置文件或环境变量(配置项同名)实现修改，修改保存后重启即可生效
+> 以下配置项位于`config/config.ini`文件中，支持通过配置文件或环境变量进行修改，修改保存后重启即可生效
 
 | 配置项                    | 描述                                                                                                                                                                    | 默认值               |
 |:-----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
@@ -158,6 +158,7 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 | open_use_cache         | 开启使用本地缓存数据，适用于查询请求失败场景（仅针对酒店源与组播源）                                                                                                                                    | True              |
 | open_history           | 开启使用历史更新结果（包含模板与结果文件的接口），合并至本次更新中                                                                                                                                     | True              |
 | open_headers           | 开启使用M3U内含的请求头验证信息，用于测速等操作，注意：只有个别播放器支持播放这类含验证信息的接口，默认为关闭                                                                                                              | False             |
+| app_host               | 页面服务Host地址，默认使用本机IP                                                                                                                                                   |                   |
 | app_port               | 页面服务端口，用于控制页面服务的端口号                                                                                                                                                   | 8000              |
 | cdn_url                | CDN代理加速地址，用于订阅源、频道图标等资源的加速访问                                                                                                                                          |                   |
 | final_file             | 生成结果文件路径                                                                                                                                                              | output/result.txt |
@@ -198,34 +199,35 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 
 ## 快速上手
 
-### 目录说明
+### 配置与结果目录
 
-| 目录路径                      | 说明                  |
-|:--------------------------|:--------------------|
-| config                    | 配置文件目录，包含配置文件、模板文件等 |
-| config/config.ini         | 配置参数文件              |
-| config/rtp                | 各地区运营商组播源ip         |
-| config/demo.txt           | 频道模板                |
-| config/alias.txt          | 频道别名                |
-| config/blacklist.txt      | 接口黑名单               |
-| config/whitelist.txt      | 接口白名单               |
-| config/subscribe.txt      | 频道订阅源列表             |
-| config/local.txt          | 本地源文件               |
-| config/epg.txt            | EPG订阅源列表            |
-| output                    | 结果文件目录，包含生成的结果文件等   |
-| output/data               | 结果数据缓存目录            |
-| output/epg                | EPG结果目录             |
-| output/ipv4               | IPv4结果目录            |
-| output/ipv6               | IPv6结果目录            |
-| output/result(.m3u/txt)   | m3u/txt结果           |
-| output/live(.m3u/txt)     | RTMP推流live结果        |
-| output/hls(.m3u/txt)      | RTMP推流hls结果         |
-| output/log                | 日志文件目录              |
-| output/log/result.log     | 有效结果日志              |
-| output/log/speed_test.log | 测速日志                |
-| output/log/statistic.log  | 统计结果日志              |
-| output/log/nomatch.log    | 未匹配频道记录             |
-| source.json               | 点播源配置文件             |
+```
+iptv-api/                  # 项目根目录
+├── config                 # 配置文件目录，包含配置文件、模板文件等
+│   └── config.ini         # 配置参数文件
+│   └── rtp                # 各地区运营商组播源ip
+│   └── demo.txt           # 频道模板
+│   └── alias.txt          # 频道别名
+│   └── blacklist.txt      # 接口黑名单
+│   └── whitelist.txt      # 接口白名单
+│   └── subscribe.txt      # 频道订阅源列表
+│   └── local.txt          # 本地源文件
+│   └── epg.txt            # EPG订阅源列表
+├── output                 # 结果文件目录，包含生成的结果文件等
+│   └── data               # 结果数据缓存目录
+│   └── epg                # EPG结果目录
+│   └── ipv4               # IPv4结果目录
+│   └── ipv6               # IPv6结果目录
+│   └── result.m3u/txt     # m3u/txt结果
+│   └── live.m3u/txt       # RTMP live推流结果
+│   └── hls.m3u/txt        # RTMP hls推流结果
+│   └── log                # 日志文件目录
+│       └── result.log     # 有效结果日志
+│       └── speed_test.log # 测速日志
+│       └── statistic.log  # 统计结果日志
+│       └── nomatch.log    # 未匹配频道记录
+└── source.json            # 点播源配置文件
+```
 
 ### 工作流
 
@@ -298,10 +300,12 @@ docker run -d -p 8000:8000 guovern/iptv-api
 
 ##### 环境变量：
 
-| 变量       | 描述                 | 默认值                |
-|:---------|:-------------------|:-------------------|
-| APP_HOST | 服务host地址，可修改使用公网域名 | "http://localhost" |
-| APP_PORT | 服务端口               | 8000               |
+| 变量       | 描述                 | 默认值  |
+|:---------|:-------------------|:-----|
+| APP_HOST | 服务host地址，可修改使用公网域名 | 本机IP |
+| APP_PORT | 服务端口               | 8000 |
+
+除了以上环境变量，还支持通过环境变量覆盖配置文件中的[配置项](#配置)
 
 #### 3. 更新结果
 
@@ -351,15 +355,13 @@ docker run -d -p 8000:8000 guovern/iptv-api
 
 [更新日志](./CHANGELOG.md)
 
-## 赞赏
-
-<div>开发维护不易，请我喝杯咖啡☕️吧~</div>
-
-| 支付宝                                  | 微信                                      |
-|--------------------------------------|-----------------------------------------|
-| ![支付宝扫码](./static/images/alipay.jpg) | ![微信扫码](./static/images/appreciate.jpg) |
-
 ## 关注
+
+### Github
+
+关注我的Github账号[Guovin](https://github.com/Guovin)，获取更多实用项目
+
+### 微信公众号
 
 微信公众号搜索 Govin，或扫码，接收更新推送、学习更多使用技巧：
 
@@ -367,7 +369,59 @@ docker run -d -p 8000:8000 guovern/iptv-api
 
 ## Star统计
 
-[![Star统计](https://api.star-history.com/svg?repos=Guovin/iptv-api&type=Date)](https://star-history.com/#Guovin/iptv-api&Date)
+[![Star统计](https://starchart.cc/Guovin/iptv-api.svg?variant=adaptive)](https://starchart.cc/Guovin/iptv-api)
+
+## 捐赠
+
+<div>开发维护不易，请我喝杯咖啡☕️吧~</div>
+
+| 支付宝                                  | 微信                                      |
+|--------------------------------------|-----------------------------------------|
+| ![支付宝扫码](./static/images/alipay.jpg) | ![微信扫码](./static/images/appreciate.jpg) |
+
+### ❤️ 捐赠名单
+
+衷心感谢每一位捐赠者！您的慷慨帮助我们改进和完善项目，感谢您的支持！❤️
+
+| 名称            | 来源  | 网站 | 留言              | 金额   |
+|:--------------|:----|:---|:----------------|:-----|
+| Fernando 杨    | 公众号 |    |                 | 100  |
+| Chief         | 赞赏码 |    |                 | 66   |
+| 中国人（陈特光）      | 公众号 |    |                 | 50   |
+| James Zong    | 赞赏码 |    |                 | 50   |
+| Peike         | 赞赏码 |    |                 | 50   |
+| 陈启跃           | 赞赏码 |    |                 | 50   |
+| **彬           | 支付宝 |    |                 | 30   |
+| 戒烟            | 公众号 |    | 大佬辛苦了           | 25   |
+| 搂着猫的老鼠        | 公众号 |    | 受教了，非常感谢您的付出    | 25   |
+| pakysr        | 赞赏码 |    |                 | 20   |
+| 随波            | 公众号 |    |                 | 20   |
+| 公子            | 公众号 |    |                 | 20   |
+| 迎着风雨成长        | 公众号 |    |                 | 20   |
+| 丨说好的幸福呢       | 公众号 |    |                 | 20   |
+| 大胖雷蒙德         | 公众号 |    | 加油！             | 20   |
+| 科技=未来～随心所欲=幸福 | 公众号 |    |                 | 20   |
+| 钦             | 公众号 |    | 广东珠江台可以流畅点吗，谢谢你 | 20   |
+| 王炫茗           | 赞赏码 |    |                 | 20   |
+| *会            | 支付宝 |    |                 | 20   |
+| 李老师（杠爷）       | 公众号 |    | 已留言请教，望有空回复     | 10   |
+| 威记            | 公众号 |    |                 | 10   |
+| zxx           | 公众号 |    | 不懂的可以请教吗        | 10   |
+| zzj           | 赞赏码 |    |                 | 10   |
+| 彪             | 赞赏码 |    |                 | 10   |
+| *洁            | 支付宝 |    |                 | 10   |
+| *胜            | 支付宝 |    |                 | 10   |
+| **翔           | 支付宝 |    |                 | 10   |
+| *宇            | 支付宝 |    |                 | 10   |
+| **欣           | 支付宝 |    |                 | 10   |
+| **高           | 支付宝 |    |                 | 10   |
+| **胜           | 支付宝 |    |                 | 10   |
+| 烊             | 公众号 |    |                 | 8.88 |
+| 骑着蜗牛追火箭       | 公众号 |    | 大佬威武！！！！！       | 5    |
+| 大胖雷蒙德         | 公众号 |    | 加油。             | 5    |
+| 韶梦年华          | 公众号 |    |                 | 5    |
+| BlueSymphony  | 公众号 |    |                 | 5    |
+| **勇           | 支付宝 |    |                 | 5    |
 
 ## 免责声明
 

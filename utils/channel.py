@@ -311,26 +311,31 @@ def get_channel_multicast_result(result, search_result):
     Get the channel multicast info result by result and search result
     """
     info_result = {}
-    multicast_name = constants.origin_map["multicast"]
+    multicast_name = constants.origin_map.get("multicast", "")
+    open_url_info = config.open_url_info
     for name, result_obj in result.items():
-        info_list = [
-            {
-                "url":
-                    add_url_info(
-                        total_url,
-                        f"{result_region}{result_type}{multicast_name}",
-                    ),
-                "date": date,
-                "resolution": resolution,
-            }
-            for result_region, result_types in result_obj.items()
-            if result_region in search_result
-            for result_type, result_type_urls in result_types.items()
-            if result_type in search_result[result_region]
-            for ip in get_multicast_ip_list(result_type_urls) or []
-            for url, date, resolution in search_result[result_region][result_type]
-            if (total_url := f"http://{url}/rtp/{ip}")
-        ]
+        info_list = []
+        for result_region, result_types in result_obj.items():
+            if result_region not in search_result:
+                continue
+            sr_region = search_result[result_region]
+            for result_type, result_type_urls in result_types.items():
+                if result_type not in sr_region:
+                    continue
+                ips = get_multicast_ip_list(result_type_urls)
+                if not ips:
+                    continue
+                for item in sr_region[result_type]:
+                    host = item.get("url")
+                    if not host:
+                        continue
+                    for ip in ips:
+                        total_url = f"http://{host}/rtp/{ip}"
+                        info_list.append({
+                            "url": add_url_info(total_url,
+                                                f"{result_region}{result_type}{multicast_name}") if open_url_info else total_url,
+                            "date": item.get("date")
+                        })
         info_result[name] = info_list
     return info_result
 

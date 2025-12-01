@@ -537,27 +537,109 @@ Zhejiang TV International,https://ali-m-l.cztv.com/channels/lantian/channel10/10
 霸州文化頻道 (576p),http://hbbz.chinashadt.com:2036/live/stream:bzwh.stream/playlist.m3u8
 霸州新聞頻道 (576p),http://hbbz.chinashadt.com:2036/live/stream:bzxw.stream/playlist.m3u8
 青州文化旅游 (576p),http://sdqz.chinashadt.com:2036/live/stream:3.stream/playlist.m3u8
+ABN China (720p),https://mediaserver.abnvideos.com/streams/abnchina.m3u8
 青州生活 (576p),http://sdqz.chinashadt.com:2036/live/stream:2.stream/playlist.m3u8
+Angel TV Chinese (720p),https://janya-digimix.akamaized.net/vglive-sk-999451/chinese/ngrp:angelchinese_all/playlist.m3u8
 青州综合 (576p),http://sdqz.chinashadt.com:2036/live/stream:1.stream/playlist.m3u8
+Animation Show Channel,http://180.213.174.225:9901/tsfile/live/1034_1.m3u8?authid=0&key=txiptv&playlive=1
 青海卫视 (1080p),http://live.geermurmt.com/qhws/sd/live.m3u8
+Anshun Comprehensive News Channel,https://hplayer1.juyun.tv/camera/154379194.m3u8
 青海卫视 (576p),http://39.134.115.163:8080/PLTV/88888910/224/3221225727/index.m3u8
+东方卫视4K,http://106.53.99.30/tv/api.php?id=dfws4k
+CGTN,https://0472.org/hls/cgtn.m3u8
+Bingtuan Satellite TV,http://49.113.179.174:4022/udp/238.125.4.13:5140
 青海卫视 (540p),http://112.25.48.68/live/program/live/qhws/1300000/mnf.m3u8
+深圳卫视4K,http://106.53.99.30/tv/api.php?id=szws4k
+CGTN,http://english-livetx.cgtn.com/hls/yypdyyctzb_hd.m3u8
+Bread TV面包台 (720p),https://video.bread-tv.com:8091/hls-live24/online/index.m3u8
 靖江新闻綜合 (480p) [Not 24/7],http://visit.jjbctv.com:1935/live/xwzhmb/playlist.m3u8
+江苏卫视4K,http://106.53.99.30/tv/api.php?id=jsws4k
+CGTN俄语,https://0472.org/hls/cgtne.m3u8
+BRTV Kaku Childrens Channel,http://49.113.179.174:4022/udp/238.125.2.216:5140
 静宁综合 (1080p),http://117.156.28.119/270000001111/1110000147/index.m3u8
+东方卫视4K,http://106.53.99.30/tv/api.php?id=dfws4k
+CGTN俄语,http://russian-livews.cgtn.com/hls/LSvexABhNipibK5KRuUkvHZ7220802LSTeze9o8tdFXMHsb1VosgoT220802cd.m3u8
+BRTV Science & Education Channel,http://49.113.179.174:4022/udp/238.125.3.121:5140
 风尚购物 (1080p),http://183.207.248.71/cntv/live1/fengshanggw/fengshanggw
+苏州4K,https://live-auth.51kandianshi.com/szgd/csztv4k_hd.m3u8
+CGTN法语,https://0472.org/hls/cgtnf.m3u8
+BRTV 北京卫视 [Not 24/7],http://ivi.bupt.edu.cn/hls/btv1.m3u8
 餘姚姚江文化 (576p) [Not 24/7],https://l.cztvcloud.com/channels/lantian/SXyuyao2/720p.m3u8
+河北4K,https://event.pull.hebtv.com:443/live/live101.m3u8
+2025-03-06 16:04:54,http://45.145.229.71:8866/TVOD/6000000001000029752/wasusyt/index.m3u8
+CGTN法语,http://espanol-liveali.cgtn.com/hls/LSveOGBaBw41Ea7ukkVAUdKQ220802LSTexu6xAuFH8VZNBLE1ZNEa220802cd.m3u8
+CCTV+ 1 (600p) [Not 24/7],https://cd-live-stream.news.cctvplus.com/live/smil:CHANNEL1.smil/playlist.m3u8
 高台电视台 (1080p),http://117.156.28.119/270000001111/1110000146/index.m3u8
+南国都市4K,https://tencentplay.gztv.com/live/nanguodushi.m3u8?txSecret=550af55c0ea34ce492748481415b6dfa&txTime=1903e7b17de
+CGTN纪录,https://0472.org/hls/cgtnd.m3u8
+CCTV+ 2 (600p) [Not 24/7],https://cd-live-stream.news.cctvplus.com/live/smil:CHANNEL2.smil/playlist.m3u8
 高清电影 (1080p),http://39.134.19.76/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226463/index.m3u8
+峨眉电影4K,http://122.228.73.138:2380/hw1live.rxip.sc96655.com.huan.tv/live/emdy4k_8000.m3u8
+福州生活,http://live.zohi.tv:80/video/s10001-fztv-3/index.m3u8
+CGTN纪录,https://english-livetx.cgtn.com/hls/yypdjlctzb_hd.m3u8
+Channel Law,http://49.113.179.174:4022/udp/238.125.2.201:5140
 鹤壁新闻综合 (480p) [Not 24/7],http://pili-live-hls.hebitv.com/hebi/hebi.m3u8
+CCTV-卫生健康,http://nas.hssvm.com:8888/udp/225.1.1.210:5002
+福州综合,http://live.zohi.tv/video/s10001-fztv-1/index.m3u8
+CGTN西语,https://0472.org/hls/cgtnx.m3u8
+Channel Max,http://180.213.174.225:9901/tsfile/live/1037_1.m3u8?authid=0&key=txiptv&playlive=1
 鹤峰综合 [Geo-blocked],http://hefeng.live.tempsource.cjyun.org/videotmp/s10100-hftv.m3u8
+CCTV-电视指南,http://www.lizhinas.top:1009/rtp/239.252.219.97:5140
+无线新闻,http://iptv.diyp.site/公众号【DIYP】.php?key=gat5&id=f7b4583df4a36084ee912dbe42ae7432
+CGTN阿语,https://0472.org/hls/cgtna.m3u8
+Channel Tea,http://180.213.174.225:9901/tsfile/live/1041_1.m3u8?authid=0&key=txiptv&playlive=1
 鹿泉一套 (576p) [Not 24/7],http://hblq.chinashadt.com:2036/live/stream:luquan1.stream/playlist.m3u8
+中国天气,http://hls.weathertv.cn/tslslive/qCFIfHB/hls/live_sd.m3u8
+无线新闻,http://php.jdshipin.com:8880/TVOD/iptv.php?id=tvbxw
+中国交通,http://drive.mxmy.net:8888/udp/239.3.1.188:8001
+CHC Action,http://180.213.174.225:9901/tsfile/live/1027_1.m3u8?authid=0&key=txiptv&playlive=1
 鹿泉二套 (576p) [Not 24/7],http://hblq.chinashadt.com:2036/live/stream:luquan2.stream/playlist.m3u8
+中国交通,http://drive.mxmy.net:8888/udp/239.3.1.188:8001
+无线新闻,https://cdn9.163189.xyz/smt3.1.1.php?id=inews_twn
+熊猫直播,https://gcwbndali.v.myalicdn.com/gcwbnd/ipanda1000_2/index.m3u8
+CHC Home Theater,http://180.213.174.225:9901/tsfile/live/1030_1.m3u8?authid=0&key=txiptv&playlive=1
 黑龙卫视 (1080p),http://223.110.243.169/PLTV/3/224/3221227252/index.m3u8
+直播中国,https://gcalic.v.myalicdn.com/gc/wgw05_1/index.m3u8?contentid=2820180516001
+无线新闻,http://6v.nx.tc/smrt.php?playurl=http://v2hcdn.jdshipin.com/news/news.stream/chunklist_w1005.m3u8
+直播中国,https://gcalic.v.myalicdn.com/gc/wgw05_1/index.m3u8?contentid=2820180516001
+Chifeng Comprehensive News Chanel,http://play1-qk.nmtv.cn/live/1735546697341033.m3u8
 黑龙卫视 (1080p),http://223.110.245.139/PLTV/4/224/3221227492/index.m3u8
+熊猫直播,https://gcwbndali.v.myalicdn.com/gcwbnd/ipanda1000_2/index.m3u8
+无线新闻,http://cdn9.163189.xyz/smt1.1.php?id=inews_twn
+支持作者,https://vd2.bdstatic.com/mda-rkaittscnuukharr/sc/cae_h264/1762869917385606027/mda-rkaittscnuukharr.mp4
+City Theater Channel,http://49.113.179.174:4022/udp/238.125.1.60:5140
 黑龙卫视 (1080p),http://223.110.245.170/PLTV/3/224/3221227252/index.m3u8
+CETV-1 综合教育,http://www.lizhinas.top:1009/rtp/239.252.220.198:5140
+无线新闻,https://v2hcdn.jdshipin.com/news/news.stream/chunklist_w105.m3u8
+兵团卫视,http://183.11.239.36:808/hls/7/index.m3u8
+Documentary Humanities Channel,http://49.113.179.174:4022/udp/238.125.3.135:5140
 黑龙卫视 (720p),http://125.210.152.18:9090/live/HLJWSHD_H265.m3u8
+CETV-2 空中课堂,http://www.lizhinas.top:1009/rtp/239.252.219.73:5140
+无线新闻,http://v2hcdn.jdshipin.com/news/news.stream/chunklist_w1005.m3u8
+兵团卫视,http://120.76.248.139/live/bfgd/4200000124.m3u8
+DOX Surround,http://180.213.174.225:9901/tsfile/live/1032_1.m3u8?authid=0&key=txiptv&playlive=1
 黑龙江 (1080p),http://223.110.245.161/ott.js.chinamobile.com/PLTV/3/224/3221227492/index.m3u8
+CETV-3 教育服务,http://rrs01.hw.gmcc.net:8088/PLTV/81/224/3221226722/1.m3u8
+无线新闻,https://edge2a.v2h-cdn.com/news/news.stream/chunklist.m3u8
+兵团卫视,http://218.13.170.98:9901/tsfile/live/0115_1.m3u8
+DOX Yaqu,http://180.213.174.225:9901/tsfile/live/1033_1.m3u8?authid=0&key=txiptv&playlive=1
 黑龙江 (576p),http://183.207.248.71/gitv/live1/G_HEILONGJIANG/G_HEILONGJIANG
+CETV-4 职业教育,http://rrs01.hw.gmcc.net:8088/PLTV/81/224/3221226724/1.m3u8
+无线新闻,http://122.152.202.33/s/81a8a44f/index.m3u8?id=21
+海峡卫视,http://8.138.7.223/tv/hxws.m3u8
+DOX Yijia,http://180.213.174.225:9901/tsfile/live/1031_1.m3u8?authid=0&key=txiptv&playlive=1
 黑龙江卫 (1080p),http://183.207.248.71/cntv/live1/HD-2500k-1080P-heilongjiangstv/HD-2500k-1080P-heilongjiangstv
+CGTN英语,http://english-livetx.cgtn.com/hls/yypdyyctzb_hd.m3u8
+黑莓电影,http://php.jdshipin.com/TVOD/hnyd.php?id=200000001898/460000089800010073
+海峡卫视,http://38.64.72.148:80/hls/modn/list/4009/chunklist0.m3u8
+Dragon TV International (360p),http://210.210.155.37/x6bnqe/s/s29/index.m3u8
 黑龙江卫视 (2160p),http://118.81.195.79:9003/hls/31/index.m3u8
+CGTN记录,https://english-livetx.cgtn.com/hls/yypdjlctzb_hd.m3u8
+黑莓电影,http://140.245.86.67:50001/1000000004000019624/ystenlive/index.m3u8
+海峡卫视,http://38.64.72.148:80/hls/modn/list/4009/playlist.m3u8
+Ecology & Environment TV,http://49.113.179.174:4022/udp/238.125.2.175:5140
 Xinjiang TV 1,https://klmysjtzb.rcsxzx.com/hls/klmy2.m3u8
+CGTN俄语,http://russian-livews.cgtn.com/hls/LSvexABhNipibK5KRuUkvHZ7220802LSTeze9o8tdFXMHsb1VosgoT220802cd.m3u8
+精品体育,http://140.245.86.67:50001/1000000004000014634/ystenlive/index.m3u8
+海峡卫视,http://r.jdshipin.com/WtYt3
+Game Channel,http://49.113.179.174:4022/udp/238.125.1.36:5140

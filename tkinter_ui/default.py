@@ -226,7 +226,7 @@ class DefaultUI:
         self.ipv_type_label.pack(side=tk.LEFT, padx=4, pady=8)
         self.ipv_type_combo = ttk.Combobox(frame_default_channel_column2, width=5)
         self.ipv_type_combo.pack(side=tk.LEFT, padx=4, pady=8)
-        self.ipv_type_combo["values"] = ("IPv4", "IPv6", "全部")
+        self.ipv_type_combo["values"] = ("IPv4", "IPv6", "all")
         if config.ipv_type == "ipv4":
             self.ipv_type_combo.current(0)
         elif config.ipv_type == "ipv6":

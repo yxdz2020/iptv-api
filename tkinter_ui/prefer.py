@@ -56,11 +56,11 @@ class PreferUI:
         self.prefer_ipv_type_label.pack(side=tk.LEFT, padx=4, pady=8)
         self.prefer_ipv_type_combo = ttk.Combobox(frame_prefer_ipv_type, width=22)
         self.prefer_ipv_type_combo.pack(side=tk.LEFT, padx=4, pady=8)
-        self.prefer_ipv_type_combo["values"] = ("IPv4", "IPv6", "自动")
+        self.prefer_ipv_type_combo["values"] = ("IPv4", "IPv6", "auto")
         ipv_type_prefer = config.ipv_type_prefer
         if ipv_type_prefer:
             first_ipv_type_prefer = ipv_type_prefer[0]
-            prefer_map = {"ipv4": 0, "ipv6": 1, "自动": 2, "auto": 2}
+            prefer_map = {"ipv4": 0, "ipv6": 1, "auto": 2}
             if first_ipv_type_prefer in prefer_map:
                 self.prefer_ipv_type_combo.current(prefer_map[first_ipv_type_prefer])
         self.prefer_ipv_type_combo.bind(

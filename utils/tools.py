@@ -1,3 +1,4 @@
+import copy
 import datetime
 import json
 import logging
@@ -28,13 +29,38 @@ def get_logger(path, level=logging.ERROR, init=False):
     """
     get the logger
     """
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+    dir_name = os.path.dirname(path) or "."
+    os.makedirs(dir_name, exist_ok=True)
     os.makedirs(constants.output_dir, exist_ok=True)
-    if init and os.path.exists(path):
-        os.remove(path)
-    handler = RotatingFileHandler(path, encoding="utf-8")
+
     logger = logging.getLogger(path)
-    logger.addHandler(handler)
+
+    if init:
+        for h in logger.handlers[:]:
+            try:
+                logger.removeHandler(h)
+                h.close()
+            except Exception:
+                pass
+
+        if os.path.exists(path):
+            try:
+                with open(path, "w", encoding="utf-8"):
+                    pass
+            except PermissionError:
+                pass
+            except Exception:
+                pass
+
+    handler = RotatingFileHandler(path, encoding="utf-8", delay=True)
+
+    abs_path = os.path.abspath(path)
+    if not any(
+            isinstance(h, RotatingFileHandler) and getattr(h, "baseFilename", None) == abs_path
+            for h in logger.handlers
+    ):
+        logger.addHandler(handler)
+
     logger.setLevel(level)
     return logger
 
@@ -280,45 +306,78 @@ def check_url_by_keywords(url, keywords=None):
 
 def merge_objects(*objects, match_key=None):
     """
-    Merge objects
-
+    Merge objects while preserving defaultdict types (including default_factory).
     Args:
         *objects: Dictionaries to merge
         match_key: If dict1[key] is a list of dicts, this key will be used to match and merge dicts
     """
+
+    def clone_empty(value):
+        """
+        Return an empty container of the same *container* type as value,
+        preserving defaultdict default_factory when applicable.
+        """
+        if isinstance(value, defaultdict):
+            return defaultdict(value.default_factory)
+        if isinstance(value, dict):
+            return {}
+        if isinstance(value, list):
+            return []
+        if isinstance(value, set):
+            return set()
+        try:
+            return copy.copy(value)
+        except Exception:
+            return value
 
     def merge_dicts(dict1, dict2):
         for key, value in dict2.items():
             if key in dict1:
                 if isinstance(dict1[key], dict) and isinstance(value, dict):
                     merge_dicts(dict1[key], value)
-                elif isinstance(dict1[key], set):
+                elif isinstance(dict1[key], set) and isinstance(value, (set, list)):
                     dict1[key].update(value)
                 elif isinstance(dict1[key], list) and isinstance(value, list):
                     if match_key and all(isinstance(x, dict) for x in dict1[key] + value):
-                        existing_items = {item[match_key]: item for item in dict1[key]}
+                        existing_items = {item.get(match_key): item for item in dict1[key] if match_key in item}
                         for new_item in value:
                             if match_key in new_item and new_item[match_key] in existing_items:
                                 merge_dicts(existing_items[new_item[match_key]], new_item)
                             else:
                                 dict1[key].append(new_item)
                     else:
-                        dict1[key].extend(x for x in value if x not in dict1[key])
+                        for x in value:
+                            if x not in dict1[key]:
+                                dict1[key].append(x)
                 elif value != dict1[key]:
-                    dict1[key] = value
+                    dict1[key] = copy.deepcopy(value)
             else:
-                dict1[key] = value
+                if isinstance(value, dict):
+                    dict1[key] = clone_empty(value)
+                    merge_dicts(dict1[key], value)
+                else:
+                    dict1[key] = copy.deepcopy(value)
 
-    merged_dict = {}
+    if not objects:
+        return {}
+
     for obj in objects:
         if not isinstance(obj, dict):
             raise TypeError("All input objects must be dictionaries")
+
+    first_obj = objects[0]
+    if isinstance(first_obj, defaultdict):
+        merged_dict = defaultdict(first_obj.default_factory)
+    else:
+        merged_dict = {}
+
+    for obj in objects:
         merge_dicts(merged_dict, obj)
 
     return merged_dict
 
 
-def get_public_url(port: int = config.app_port) -> str:
+def get_public_url(port: int = config.public_port) -> str:
     host = config.public_domain
     scheme = config.public_scheme
     default_port = 80 if scheme == 'http' else 443
@@ -344,7 +403,7 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
     """
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as file:
-            m3u_output = f'#EXTM3U x-tvg-url="{get_epg_url()}"\n'
+            m3u_output = f'#EXTM3U x-tvg-url="{get_epg_url()}"\n' if config.open_epg else "#EXTM3U\n"
             current_group = None
             logo_url = join_url(config.cdn_url,
                                 config.logo_url) if "raw.githubusercontent.com" in config.logo_url else config.logo_url

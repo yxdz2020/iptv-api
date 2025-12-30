@@ -71,5 +71,5 @@
 | open_rtmp              | 开启 RTMP 推流功能，需要安装 FFmpeg，利用本地带宽提升接口播放体验                                                                                                                                     | True              |
 | nginx_http_port        | Nginx HTTP 服务端口，用于 RTMP 推流转发的 HTTP 服务端口                                                                                                                                     | 8080              |
 | nginx_rtmp_port        | Nginx RTMP 服务端口，用于 RTMP 推流转发的 RTMP 服务端口                                                                                                                                     | 1935              |
-| rtmp_idle_timeout      | RTMP 频道接口空闲停止推流超时时长，单位秒(s)，用于控制接口无人观看时超过该时长后停止推流，调整此值能优化服务器资源占用                                                                                                             | 60                |
+| rtmp_idle_timeout      | RTMP 频道接口空闲停止推流超时时长，单位秒(s)，用于控制接口无人观看时超过该时长后停止推流，调整此值能优化服务器资源占用                                                                                                             | 300               |
 | rtmp_max_streams       | RTMP 推流最大并发数量，用于控制同时推流的频道数量，数值越大服务器压力越大，调整此值能优化服务器资源占用                                                                                                                      | 10                |

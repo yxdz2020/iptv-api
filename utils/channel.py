@@ -111,13 +111,25 @@ def get_channel_data_from_file(channels, file, whitelist_maps, blacklist,
                 name = name_value[0]["name"]
                 url = name_value[0]["value"]
                 category_dict = channels[current_category]
-                if name not in category_dict:
+                first_time = name not in category_dict
+                if first_time:
                     category_dict[name] = []
+                existing_urls = {d.get("url") for d in category_dict.get(name, []) if d.get("url")}
+
+                if first_time:
                     for whitelist_url in get_whitelist_url(whitelist_maps, name):
-                        category_dict[name].append(format_channel_data(whitelist_url, "whitelist"))
+                        formatted = format_channel_data(whitelist_url, "whitelist")
+                        if formatted["url"] not in existing_urls:
+                            category_dict[name].append(formatted)
+                            existing_urls.add(formatted["url"])
+
                     if hls_data and name in hls_data:
                         for hls_url in hls_data[name]:
-                            category_dict[name].append(format_channel_data(hls_url, "hls"))
+                            formatted = format_channel_data(hls_url, "hls")
+                            if formatted["url"] not in existing_urls:
+                                category_dict[name].append(formatted)
+                                existing_urls.add(formatted["url"])
+
                     if open_local and local_data:
                         alias_names = channel_alias.get(name)
                         alias_names.update([name, format_name(name)])
@@ -125,7 +137,10 @@ def get_channel_data_from_file(channels, file, whitelist_maps, blacklist,
                             if alias_name in local_data:
                                 for local_url in local_data[alias_name]:
                                     if not check_url_by_keywords(local_url, blacklist):
-                                        category_dict[name].append(format_channel_data(local_url, "local"))
+                                        formatted = format_channel_data(local_url, "local")
+                                        if formatted["url"] not in existing_urls:
+                                            category_dict[name].append(formatted)
+                                            existing_urls.add(formatted["url"])
                             elif alias_name.startswith("re:"):
                                 raw_pattern = alias_name[3:]
                                 try:
@@ -134,14 +149,23 @@ def get_channel_data_from_file(channels, file, whitelist_maps, blacklist,
                                         if re.match(pattern, local_name):
                                             for local_url in local_data[local_name]:
                                                 if not check_url_by_keywords(local_url, blacklist):
-                                                    category_dict[name].append(format_channel_data(local_url, "local"))
+                                                    formatted = format_channel_data(local_url, "local")
+                                                    if formatted["url"] not in existing_urls:
+                                                        category_dict[name].append(formatted)
+                                                        existing_urls.add(formatted["url"])
                                 except re.error:
                                     pass
                 if url:
                     if is_url_whitelisted(whitelist_maps, url, name):
-                        category_dict[name].append(format_channel_data(url, "whitelist"))
+                        formatted = format_channel_data(url, "whitelist")
+                        if formatted["url"] not in existing_urls:
+                            category_dict[name].append(formatted)
+                            existing_urls.add(formatted["url"])
                     elif open_local and not check_url_by_keywords(url, blacklist):
-                        category_dict[name].append(format_channel_data(url, "local"))
+                        formatted = format_channel_data(url, "local")
+                        if formatted["url"] not in existing_urls:
+                            category_dict[name].append(formatted)
+                            existing_urls.add(formatted["url"])
     return channels
 
 
@@ -961,7 +985,7 @@ def write_channel_to_file(data, epg=None, ipv6=False, first_channel_name=None):
         if any(pref == "auto" for pref in ipv_type_prefer):
             ipv_type_prefer = ["ipv6", "ipv4"] if ipv6 else ["ipv4", "ipv6"]
         origin_type_prefer = config.origin_type_prefer
-        hls_url = f"{get_public_url(config.nginx_http_port)}/hls"
+        hls_url = f"{get_public_url()}/hls"
         logger = get_logger(constants.statistic_log_path, level=INFO, init=True)
         file_list = [
             {"path": config.final_file, "enable_log": True},

@@ -324,58 +324,62 @@ If you do not understand the software configuration options, do not change anyth
 
 ## Docker
 
-### One‑click deployment with Compose
+### 1. Deployment with Compose
 
-[docker-compose.yml](../docker-compose.yml)
+Download the [docker-compose.yml](../docker-compose.yml) or create one by copying the content (internal parameters can
+be changed as needed), then run the following command in the path where the file is located:
 
 ```bash
 docker compose up -d
 ```
 
-### Manual deployment with commands
+### 2. Manual deployment with commands
 
-#### 1. Pull the image
+#### (1) Pull the image
 
 ```bash
 docker pull guovern/iptv-api:latest
 ```
 
-🚀 Proxy acceleration (recommended for users in China, may be cached):
+🚀 Proxy acceleration (use this command if pulling fails, but it may download an older version):
 
 ```bash
 docker pull docker.1ms.run/guovern/iptv-api:latest
 ```
 
-#### 2. Run the container
+#### (2) Run the container
 
 ```bash
-docker run -d -p 5180:5180 guovern/iptv-api
+docker run -d -p 80:8080 guovern/iptv-api
 ```
 
-**Environment Variables:**
+**Environment variables:**
 
-| Variable        | Description             | Default Value |
-|:----------------|:------------------------|:--------------|
-| APP_PORT        | Service port            | 5180          |
-| NGINX_HTTP_PORT | Nginx HTTP service port | 8080          |
-| NGINX_RTMP_PORT | Nginx RTMP service port | 1935          |
+| Variable        | Description                                                                                                      | Default   |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------|:----------|
+| PUBLIC_DOMAIN   | Public domain or IP address, determines external access and the Host used in push stream results                 | 127.0.0.1 |
+| PUBLIC_PORT     | Public port, set to the mapped port, determines external access address and the port used in push stream results | 80        |
+| NGINX_HTTP_PORT | Nginx HTTP service port, needs to be mapped for external access                                                  | 8080      |
+
+If you need to modify environment variables, add the following parameters after the above run command:
+
+```bash
+# Modify public domain
+-e PUBLIC_DOMAIN=your.domain.com
+# Modify public port
+-e PUBLIC_PORT=80
+```
 
 In addition to the environment variables listed above, you can also override
-the [configuration items](../docs/config_en.md) in the
-configuration file via environment variables.
+the [configuration items](../docs/config_en.md) in the configuration file via environment variables.
 
 **Mounts:** used to synchronize files between the host and the container. You can edit templates, configs, and access
 generated result files directly on the host. Append the following options to the run command above:
 
-Mount config directory:
-
 ```bash
+# Mount config directory
 -v /iptv-api/config:/iptv-api/config
-```
-
-Mount output directory:
-
-```bash
+# Mount output directory
 -v /iptv-api/output:/iptv-api/output
 ```
 
@@ -401,20 +405,22 @@ Mount output directory:
 **RTMP Streaming:**
 
 > [!NOTE]
-> 1. After enabling streaming, obtained sources (for example subscription sources) will be streamed by default.
-> 2. To stream local video sources, create an `hls` folder inside the `config` directory.
-> 3. Place video files named with the `channel name` into that folder; the program will automatically stream them to the
-     corresponding channels.
-> 4. Visit `http://127.0.0.1:8080/stat` to view real-time streaming status and statistics.
+> 1. If deploying on a server, be sure to set the `PUBLIC_DOMAIN` environment variable to the server's domain name or IP
+     address and the `PUBLIC_PORT` environment variable to the public port; otherwise the streaming addresses will not
+     be accessible.
+> 2. When streaming is enabled, obtained interfaces (e.g., subscription sources) will be streamed by default.
+> 3. To stream local video sources, create an `hls` folder under the `config` directory and place video files named
+     after the channel; the program will automatically stream them to the corresponding channels.
 
-| Streaming Endpoint | Description                         |
-|:-------------------|:------------------------------------|
-| /hls               | hls streaming endpoint              |
-| /hls/txt           | hls txt streaming endpoint          |
-| /hls/m3u           | hls m3u streaming endpoint          |
-| /hls/ipv4          | hls ipv4 default streaming endpoint |
-| /hls/ipv6          | hls ipv6 default streaming endpoint |
-| /hls/ipv4/txt      | hls ipv4 txt streaming endpoint     |
-| /hls/ipv4/m3u      | hls ipv4 m3u streaming endpoint     |
-| /hls/ipv6/txt      | hls ipv6 txt streaming endpoint     |
-| /hls/ipv6/m3u      | hls ipv6 m3u streaming endpoint     |
+| Streaming Endpoint | Description                          |
+|:-------------------|:-------------------------------------|
+| /hls               | hls streaming endpoint               |
+| /hls/txt           | hls txt streaming endpoint           |
+| /hls/m3u           | hls m3u streaming endpoint           |
+| /hls/ipv4          | hls ipv4 default streaming endpoint  |
+| /hls/ipv6          | hls ipv6 default streaming endpoint  |
+| /hls/ipv4/txt      | hls ipv4 txt streaming endpoint      |
+| /hls/ipv4/m3u      | hls ipv4 m3u streaming endpoint      |
+| /hls/ipv6/txt      | hls ipv6 txt streaming endpoint      |
+| /hls/ipv6/m3u      | hls ipv6 m3u streaming endpoint      |
+| /stat              | Streaming status statistics endpoint |

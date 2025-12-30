@@ -23,7 +23,7 @@ hls_running_streams = OrderedDict()
 STREAMS_LOCK = threading.Lock()
 hls_last_access = {}
 HLS_IDLE_TIMEOUT = config.rtmp_idle_timeout
-HLS_WAIT_TIMEOUT = 15
+HLS_WAIT_TIMEOUT = 30
 HLS_WAIT_INTERVAL = 0.5
 MAX_STREAMS = config.rtmp_max_streams
 nginx_dir = resource_path(os.path.join('utils', 'nginx-rtmp-win32'))
@@ -79,10 +79,19 @@ def start_hls_to_rtmp(host, channel_id):
         'ffmpeg',
         '-loglevel', 'error',
         '-re',
-        '-headers', headers_str,
+    ]
+
+    if headers_str:
+        cmd += ['-headers', headers_str]
+
+    cmd += [
         '-i', url.partition('$')[0],
-        '-c:v', 'copy',
-        '-c:a', 'copy',
+        '-c:v', 'libx264',
+        '-preset', 'veryfast',
+        '-tune', 'zerolatency',
+        '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+        '-c:a', 'aac',
+        '-b:a', '128k',
         '-f', 'flv',
         '-flvflags', 'no_duration_filesize',
         join_url(host, channel_id)
@@ -94,6 +103,7 @@ def start_hls_to_rtmp(host, channel_id):
             stderr=subprocess.DEVNULL,
             stdin=subprocess.DEVNULL
         )
+        print(t("msg.rtmp_publish").format(channel_id=channel_id, source=url))
     except Exception as e:
         return print(t("msg.error_start_ffmpeg_failed").format(info=e))
 

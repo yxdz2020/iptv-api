@@ -217,7 +217,7 @@ def hls_proxy(channel_id):
         host = f"{app_rtmp_url}/hls"
         start_hls_to_rtmp(host, channel_id)
 
-    hls_min_segments = 5
+    hls_min_segments = 3
     waited = 0.0
     while waited < HLS_WAIT_TIMEOUT:
         if os.path.exists(m3u8_path):
@@ -250,15 +250,6 @@ def hls_proxy(channel_id):
     return Response(data, mimetype='application/vnd.apple.mpegurl')
 
 
-@app.post('/on_publish')
-def on_publish():
-    form = request.form
-    channel_id = form.get('name', '')
-
-    print(t("msg.rtmp_publish").format(channel_id=channel_id))
-    return ''
-
-
 @app.post('/on_done')
 def on_done():
     form = request.form
@@ -279,7 +270,7 @@ def run_service():
             print(t("msg.ipv4_api").format(api=f"{base_api}/ipv4"))
             print(t("msg.ipv6_api").format(api=f"{base_api}/ipv6"))
             print(t("msg.full_api").format(api=base_api))
-            app.run(host="0.0.0.0", port=config.app_port)
+            app.run(host="127.0.0.1", port=config.app_port)
     except Exception as e:
         print(t("msg.error_service_start_failed").format(info=e))
 

@@ -35,11 +35,6 @@ pipeline 🚀. Supports extensive customization; paste the resulting URL into yo
 
 </div>
 
-🎉💻 [IPTV-Web](https://github.com/Guovin/iptv-web): IPTV live stream management platform, supports online playback and
-other features, under development...
-
-💖 [Channel Alias Collection Plan](https://github.com/Guovin/iptv-api/discussions/1082)
-
 - [✅ Core Features](#core-features)
 - [🔗 Latest results](#latest-results)
 - [⚙️ Config parameter](#Config)
@@ -82,20 +77,20 @@ other features, under development...
 
 ## Core Features
 
-| Feature                               | Status | Description                                                                                                                         |
-|:--------------------------------------|:------:|:------------------------------------------------------------------------------------------------------------------------------------|
-| **Custom Templates**                  |   ✅    | Generate personalized channels as you wish                                                                                          |
-| **Channel Alias**                     |   ✅    | Improves channel result coverage and accuracy, supports regular expressions                                                         |
-| **Multiple Source Types**             |   ✅    | Supports local sources, multicast, hotel sources, subscriptions, and keyword search                                                 |
-| **RTMP streaming**                    |   ✅    | Supports HLS mode (segmented / adaptive bitrate), improves compatibility and reduces buffering, enhancing playback on weak networks |
-| **Playback Interfaces**               |   ✅    | Supports acquisition and generation of playback interfaces                                                                          |
-| **EPG (Electronic Program Guide)**    |   ✅    | Displays channel preview content                                                                                                    |
-| **Channel Logo**                      |   ✅    | Supports custom channel logo library sources                                                                                        |
-| **Interface Speed Test & Validation** |   ✅    | Measures latency, speed, resolution, and filters invalid interfaces                                                                 |
-| **Advanced Preferences**              |   ✅    | IPv4/IPv6, interface sorting priority, quantity configuration, blacklist/whitelist, region & ISP filtering                          |
-| **Scheduled Tasks**                   |   ✅    | Automatically updates at 6:00 and 18:00 Beijing time daily by default; customizable schedule                                        |
-| **Multiple Run Modes**                |   ✅    | Supports workflow, CLI, GUI software, Docker (amd64/arm64/arm v7)                                                                   |
-| **More Features**                     |   ✨    | See [Configuration Parameters](#Config) section for details                                                                         |
+| Feature                               | Status | Description                                                                                                                                        |
+|:--------------------------------------|:------:|:---------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Custom Templates**                  |   ✅    | Generate personalized channels as you wish                                                                                                         |
+| **Channel Alias**                     |   ✅    | Improves channel result coverage and accuracy, supports regular expressions                                                                        |
+| **Multiple Source Types**             |   ✅    | Supports local sources, multicast, hotel sources, subscriptions, and keyword search                                                                |
+| **RTMP streaming**                    |   ✅    | Supports HLS mode to improve compatibility and reduce buffering, enhancing playback on poor networks, and supports playback in browsers or players |
+| **Playback Interfaces**               |   ✅    | Supports acquisition and generation of playback interfaces                                                                                         |
+| **EPG (Electronic Program Guide)**    |   ✅    | Displays channel preview content                                                                                                                   |
+| **Channel Logo**                      |   ✅    | Supports custom channel logo library sources                                                                                                       |
+| **Interface Speed Test & Validation** |   ✅    | Measures latency, speed, resolution, and filters invalid interfaces                                                                                |
+| **Advanced Preferences**              |   ✅    | IPv4/IPv6, interface sorting priority, quantity configuration, blacklist/whitelist, region & ISP filtering                                         |
+| **Scheduled Tasks**                   |   ✅    | Automatically updates at 6:00 and 18:00 Beijing time daily by default; customizable schedule                                                       |
+| **Multiple Run Modes**                |   ✅    | Supports workflow, CLI, GUI software, Docker (amd64/arm64/arm v7)                                                                                  |
+| **More Features**                     |   ✨    | See [Configuration Parameters](#Config) section for details                                                                                        |
 
 ## Latest results
 
@@ -208,7 +203,7 @@ https://raw.githubusercontent.com/Guovin/iptv-api/gd/source.json
 | open_rtmp              | Enable RTMP push function. Requires FFmpeg installed, uses local bandwidth to improve playback experience.                                                                                                                                                                                                                                                           | True              |
 | nginx_http_port        | Nginx HTTP service port, used for the HTTP service of RTMP push forwarding.                                                                                                                                                                                                                                                                                          | 8080              |
 | nginx_rtmp_port        | Nginx RTMP service port, used for the RTMP service of RTMP push forwarding.                                                                                                                                                                                                                                                                                          | 1935              |
-| rtmp_idle_timeout      | RTMP channel idle stop-streaming timeout in seconds. When no one watches for longer than this duration, streaming is stopped, helping reduce server resource usage.                                                                                                                                                                                                  | 60                |
+| rtmp_idle_timeout      | RTMP channel idle stop-streaming timeout in seconds. When no one watches for longer than this duration, streaming is stopped, helping reduce server resource usage.                                                                                                                                                                                                  | 300               |
 | rtmp_max_streams       | Maximum number of concurrent RTMP push streams. Controls how many channels can be pushed at the same time. Larger values increase server load; tune to optimize resource usage.                                                                                                                                                                                      | 10                |
 
 ## Quick Start
@@ -284,41 +279,51 @@ pipenv run ui
 
 ### Docker
 
-#### One‑click deployment with Compose
+#### 1. Deployment with Compose (recommended)
 
-[docker-compose.yml](./docker-compose.yml)
+Download the [docker-compose.yml](./docker-compose.yml) or create one by copying the content (internal parameters can
+be changed as needed), then run the following command in the path where the file is located:
 
 ```bash
 docker compose up -d
 ```
 
-#### Manual deployment with commands
+#### 2. Manual deployment with commands
 
-##### 1. Pull the image
+##### (1) Pull the image
 
 ```bash
 docker pull guovern/iptv-api:latest
 ```
 
-🚀 Proxy acceleration (recommended for users in Mainland China, may be cached):
+🚀 Proxy acceleration (use this command if pulling fails, but it may download an older version):
 
 ```bash
 docker pull docker.1ms.run/guovern/iptv-api:latest
 ```
 
-##### 2. Run the container
+##### (2) Run the container
 
 ```bash
-docker run -d -p 5180:5180 guovern/iptv-api
+docker run -d -p 80:8080 guovern/iptv-api
 ```
 
-**Environment Variables:**
+**Environment variables:**
 
-| Variable        | Description             | Default Value |
-|:----------------|:------------------------|:--------------|
-| APP_PORT        | Service port            | 5180          |
-| NGINX_HTTP_PORT | Nginx HTTP service port | 8080          |
-| NGINX_RTMP_PORT | Nginx RTMP service port | 1935          |
+| Variable        | Description                                                                                                      | Default   |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------|:----------|
+| PUBLIC_DOMAIN   | Public domain or IP address, determines external access and the Host used in push stream results                 | 127.0.0.1 |
+| PUBLIC_PORT     | Public port, set to the mapped port, determines external access address and the port used in push stream results | 80        |
+| NGINX_HTTP_PORT | Nginx HTTP service port, needs to be mapped for external access                                                  | 8080      |
+
+If you need to modify environment variables, add the following parameters after the above run command:
+
+```bash
+# Modify public domain
+-e PUBLIC_DOMAIN=your.domain.com
+# Modify public port
+-e PUBLIC_PORT=80
+```
 
 In addition to the environment variables listed above, you can also override the [configuration items](#Config) in the
 configuration file via environment variables.
@@ -326,15 +331,10 @@ configuration file via environment variables.
 **Mounts:** used to synchronize files between the host and the container. You can edit templates, configs, and access
 generated result files directly on the host. Append the following options to the run command above:
 
-Mount config directory:
-
 ```bash
+# Mount config directory
 -v /iptv-api/config:/iptv-api/config
-```
-
-Mount output directory:
-
-```bash
+# Mount output directory
 -v /iptv-api/output:/iptv-api/output
 ```
 
@@ -360,23 +360,25 @@ Mount output directory:
 **RTMP Streaming:**
 
 > [!NOTE]
-> 1. After enabling streaming, obtained sources (for example subscription sources) will be streamed by default.
-> 2. To stream local video sources, create an `hls` folder inside the `config` directory.
-> 3. Place video files named with the `channel name` into that folder; the program will automatically stream them to the
-     corresponding channels.
-> 4. Visit `http://127.0.0.1:8080/stat` to view real-time streaming status and statistics.
+> 1. If deploying on a server, be sure to set the `PUBLIC_DOMAIN` environment variable to the server's domain name or IP
+     address and the `PUBLIC_PORT` environment variable to the public port; otherwise the streaming addresses will not
+     be accessible.
+> 2. When streaming is enabled, obtained interfaces (e.g., subscription sources) will be streamed by default.
+> 3. To stream local video sources, create an `hls` folder under the `config` directory and place video files named
+     after the channel; the program will automatically stream them to the corresponding channels.
 
-| Streaming Endpoint | Description                         |
-|:-------------------|:------------------------------------|
-| /hls               | hls streaming endpoint              |
-| /hls/txt           | hls txt streaming endpoint          |
-| /hls/m3u           | hls m3u streaming endpoint          |
-| /hls/ipv4          | hls ipv4 default streaming endpoint |
-| /hls/ipv6          | hls ipv6 default streaming endpoint |
-| /hls/ipv4/txt      | hls ipv4 txt streaming endpoint     |
-| /hls/ipv4/m3u      | hls ipv4 m3u streaming endpoint     |
-| /hls/ipv6/txt      | hls ipv6 txt streaming endpoint     |
-| /hls/ipv6/m3u      | hls ipv6 m3u streaming endpoint     |
+| Streaming Endpoint | Description                          |
+|:-------------------|:-------------------------------------|
+| /hls               | hls streaming endpoint               |
+| /hls/txt           | hls txt streaming endpoint           |
+| /hls/m3u           | hls m3u streaming endpoint           |
+| /hls/ipv4          | hls ipv4 default streaming endpoint  |
+| /hls/ipv6          | hls ipv6 default streaming endpoint  |
+| /hls/ipv4/txt      | hls ipv4 txt streaming endpoint      |
+| /hls/ipv4/m3u      | hls ipv4 m3u streaming endpoint      |
+| /hls/ipv6/txt      | hls ipv6 txt streaming endpoint      |
+| /hls/ipv6/m3u      | hls ipv6 m3u streaming endpoint      |
+| /stat              | Streaming status statistics endpoint |
 
 ## Changelog
 

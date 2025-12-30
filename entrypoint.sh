@@ -24,4 +24,4 @@ nginx -g 'daemon off;' &
 
 python $APP_WORKDIR/main.py &
 
-python -m gunicorn service.app:app -b 0.0.0.0:$APP_PORT --timeout=1000
+python -m gunicorn service.app:app -b 127.0.0.1:$APP_PORT --timeout=1000

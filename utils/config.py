@@ -419,7 +419,7 @@ class ConfigManager:
 
     @property
     def rtmp_idle_timeout(self):
-        return self.config.getint("Settings", "rtmp_idle_timeout", fallback=60)
+        return self.config.getint("Settings", "rtmp_idle_timeout", fallback=300)
 
     @property
     def rtmp_max_streams(self):
@@ -446,6 +446,16 @@ class ConfigManager:
         except Exception:
             pass
         return cfg
+
+    @property
+    def public_port(self):
+        env = os.getenv("PUBLIC_PORT")
+        if env:
+            try:
+                return int(env)
+            except ValueError:
+                return env
+        return self.nginx_http_port if self.open_rtmp else self.app_port
 
     @property
     def language(self):

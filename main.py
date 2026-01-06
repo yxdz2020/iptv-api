@@ -11,17 +11,13 @@ from tqdm import tqdm
 
 import utils.constants as constants
 from updates.epg import get_epg
-from updates.fofa import get_channels_by_fofa
-from updates.hotel import get_channels_by_hotel
-from updates.multicast import get_channels_by_multicast
-from updates.online_search import get_channels_by_online_search
+from updates.epg.tools import write_to_xml, compress_to_gz
 from updates.subscribe import get_channels_by_subscribe_urls
+from utils.aggregator import ResultAggregator
 from utils.channel import (
     get_channel_items,
     append_total_data,
-    test_speed,
-    write_channel_to_file,
-    sort_channel_result
+    test_speed
 )
 from utils.config import config
 from utils.i18n import t
@@ -50,11 +46,8 @@ class UpdateSource:
         self.run_ui = False
         self.tasks = []
         self.channel_items: CategoryChannelData = {}
-        self.hotel_fofa_result = {}
-        self.hotel_foodie_result = {}
-        self.multicast_result = {}
+        self.channel_names = []
         self.subscribe_result = {}
-        self.online_search_result = {}
         self.epg_result = {}
         self.channel_data: CategoryChannelData = {}
         self.pbar = None
@@ -63,26 +56,15 @@ class UpdateSource:
         self.stop_event = None
         self.ipv6_support = False
         self.now = None
+        self.aggregator = None
 
     async def visit_page(self, channel_names: list[str] = None):
         tasks_config = [
-            ("hotel_fofa", get_channels_by_fofa, "hotel_fofa_result"),
-            ("multicast", get_channels_by_multicast, "multicast_result"),
-            ("hotel_foodie", get_channels_by_hotel, "hotel_foodie_result"),
             ("subscribe", get_channels_by_subscribe_urls, "subscribe_result"),
-            (
-                "online_search",
-                get_channels_by_online_search,
-                "online_search_result",
-            ),
             ("epg", get_epg, "epg_result"),
         ]
 
         for setting, task_func, result_attr in tasks_config:
-            if (
-                    setting == "hotel_foodie" or setting == "hotel_fofa"
-            ) and config.open_hotel == False:
-                continue
             if config.open_method[setting]:
                 if setting == "subscribe":
                     whitelist_subscribe_urls, default_subscribe_urls = get_section_entries(constants.subscribe_path,
@@ -91,6 +73,9 @@ class UpdateSource:
                     print(t("msg.subscribe_urls_whitelist_total").format(default_count=len(default_subscribe_urls),
                                                                          whitelist_count=len(whitelist_subscribe_urls),
                                                                          total=len(subscribe_urls)))
+                    if not subscribe_urls:
+                        print(t("msg.no_subscribe_urls").format(file=constants.subscribe_path))
+                        continue
                     task = asyncio.create_task(
                         task_func(subscribe_urls,
                                   names=channel_names,
@@ -98,8 +83,6 @@ class UpdateSource:
                                   callback=self.update_progress
                                   )
                     )
-                elif setting == "hotel_foodie" or setting == "hotel_fofa":
-                    task = asyncio.create_task(task_func(callback=self.update_progress))
                 else:
                     task = asyncio.create_task(
                         task_func(channel_names, callback=self.update_progress)
@@ -126,29 +109,34 @@ class UpdateSource:
                 self.blacklist = get_urls_from_file(constants.blacklist_path, pattern_search=False)
                 self.channel_items = get_channel_items(self.whitelist_maps, self.blacklist)
                 self.channel_data = {}
-                channel_names = [
+                self.channel_names = [
                     name
                     for channel_obj in self.channel_items.values()
                     for name in channel_obj.keys()
                 ]
-                if not channel_names:
+                if not self.channel_names:
                     print(t("msg.no_channel_names").format(file=config.source_file))
                     return
-                await self.visit_page(channel_names)
+                await self.visit_page(self.channel_names)
+                if self.epg_result:
+                    write_to_xml(self.epg_result, constants.epg_result_path)
+                    compress_to_gz(constants.epg_result_path, constants.epg_gz_result_path)
                 self.tasks = []
                 append_total_data(
                     self.channel_items.items(),
                     self.channel_data,
-                    self.hotel_fofa_result,
-                    self.multicast_result,
-                    self.hotel_foodie_result,
                     self.subscribe_result,
-                    self.online_search_result,
                     self.whitelist_maps,
                     self.blacklist
                 )
+                self.aggregator = ResultAggregator(
+                    base_data=self.channel_data,
+                    first_channel_name=self.channel_names[0] if self.channel_names else None,
+                    ipv6_support=self.ipv6_support,
+                    write_interval=2.0
+                )
+                await self.aggregator.start()
                 cache_result = self.channel_data
-                test_result = {}
                 if config.open_speed_test:
                     urls_total = get_urls_len(self.channel_data)
                     test_data = copy.deepcopy(self.channel_data)
@@ -159,33 +147,30 @@ class UpdateSource:
                         ipv6_support=self.ipv6_support
                     )
                     self.total = get_urls_len(test_data)
-                    print(t("msg.total_urls_need_test_speed").format(total=urls_total, speed_total=self.total))
-                    self.update_progress(
-                        t("msg.progress_speed_test").format(total=urls_total, speed_total=self.total),
-                        0,
-                    )
-                    self.start_time = time()
-                    self.pbar = tqdm(total=self.total, desc=t("pbar.speed_test"))
-                    test_result = await test_speed(
-                        test_data,
-                        ipv6=self.ipv6_support,
-                        callback=lambda: self.pbar_update(name=t("pbar.speed_test"), item_name=t("pbar.url")),
-                    )
-                    cache_result = merge_objects(cache_result, test_result, match_key="url")
-                    self.pbar.close()
-                self.channel_data = sort_channel_result(
-                    self.channel_data,
-                    result=test_result,
-                    filter_host=config.speed_test_filter_host,
-                    ipv6_support=self.ipv6_support
-                )
-                self.update_progress(t("msg.creating_result"), 0)
-                write_channel_to_file(
-                    self.channel_data,
-                    epg=self.epg_result,
-                    ipv6=self.ipv6_support,
-                    first_channel_name=channel_names[0],
-                )
+                    if self.total <= 0:
+                        print(t("msg.total_urls_need_test_speed").format(total=urls_total, speed_total=self.total))
+                        self.aggregator.is_last = True
+                        await self.aggregator.flush_once(force=True)
+                    else:
+                        print(t("msg.total_urls_need_test_speed").format(total=urls_total, speed_total=self.total))
+                        self.update_progress(
+                            t("msg.progress_speed_test").format(total=urls_total, speed_total=self.total),
+                            0,
+                        )
+                        self.start_time = time()
+                        self.pbar = tqdm(total=self.total, desc=t("pbar.speed_test"))
+                        test_result = await test_speed(
+                            test_data,
+                            ipv6=self.ipv6_support,
+                            callback=lambda: self.pbar_update(name=t("pbar.speed_test"), item_name=t("pbar.url")),
+                            on_task_complete=self.aggregator.add_item
+                        )
+                        cache_result = merge_objects(cache_result, test_result, match_key="url")
+                        self.pbar.close()
+                else:
+                    self.aggregator.is_last = True
+                    await self.aggregator.flush_once(force=True)
+                await self.aggregator.stop()
                 if config.open_history:
                     if os.path.exists(constants.cache_path):
                         with gzip.open(constants.cache_path, "rb") as file:

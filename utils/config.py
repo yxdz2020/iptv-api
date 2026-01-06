@@ -94,30 +94,8 @@ class ConfigManager:
         ]
 
     @property
-    def ipv4_num(self):
-        try:
-            return self.config.getint("Settings", "ipv4_num", fallback=5)
-        except:
-            return ""
-
-    @property
-    def ipv6_num(self):
-        try:
-            return self.config.getint("Settings", "ipv6_num", fallback=5)
-        except:
-            return ""
-
-    @property
     def ipv6_support(self):
         return self.config.getboolean("Settings", "ipv6_support", fallback=False)
-
-    @property
-    def ipv_limit(self):
-        return {
-            "all": self.urls_limit,
-            "ipv4": self.ipv4_num,
-            "ipv6": self.ipv6_num,
-        }
 
     @property
     def origin_type_prefer(self):
@@ -132,30 +110,15 @@ class ConfigManager:
         ]
 
     @property
-    def hotel_num(self):
-        return self.config.getint("Settings", "hotel_num", fallback=10)
-
-    @property
-    def multicast_num(self):
-        return self.config.getint("Settings", "multicast_num", fallback=10)
-
-    @property
     def subscribe_num(self):
         return self.config.getint("Settings", "subscribe_num", fallback=10)
-
-    @property
-    def online_search_num(self):
-        return self.config.getint("Settings", "online_search_num", fallback=10)
 
     @property
     def source_limits(self):
         return {
             "all": self.urls_limit,
             "local": self.local_num,
-            "hotel": self.hotel_num,
-            "multicast": self.multicast_num,
             "subscribe": self.subscribe_num,
-            "online_search": self.online_search_num,
         }
 
     @property
@@ -180,15 +143,11 @@ class ConfigManager:
 
     @property
     def urls_limit(self):
-        return self.config.getint("Settings", "urls_limit", fallback=30)
+        return self.config.getint("Settings", "urls_limit", fallback=10)
 
     @property
     def open_url_info(self):
         return self.config.getboolean("Settings", "open_url_info", fallback=True)
-
-    @property
-    def recent_days(self):
-        return self.config.getint("Settings", "recent_days", fallback=30)
 
     @property
     def source_file(self):
@@ -207,48 +166,11 @@ class ConfigManager:
         return self.config.getboolean("Settings", f"open_subscribe", fallback=True)
 
     @property
-    def open_hotel(self):
-        return self.config.getboolean("Settings", f"open_hotel", fallback=True)
-
-    @property
-    def open_hotel_fofa(self):
-        return self.config.getboolean("Settings", f"open_hotel_fofa", fallback=True)
-
-    @property
-    def open_hotel_foodie(self):
-        return self.config.getboolean("Settings", f"open_hotel_foodie", fallback=True)
-
-    @property
-    def open_multicast(self):
-        return self.config.getboolean("Settings", f"open_multicast", fallback=True)
-
-    @property
-    def open_multicast_fofa(self):
-        return self.config.getboolean("Settings", f"open_multicast_fofa", fallback=True)
-
-    @property
-    def open_multicast_foodie(self):
-        return self.config.getboolean(
-            "Settings", f"open_multicast_foodie", fallback=True
-        )
-
-    @property
-    def open_online_search(self):
-        return self.config.getboolean("Settings", f"open_online_search", fallback=True)
-
-    @property
     def open_method(self):
         return {
             "epg": self.open_epg,
             "local": self.open_local,
             "subscribe": self.open_subscribe,
-            "hotel": self.open_hotel,
-            "multicast": self.open_multicast,
-            "online_search": self.open_online_search,
-            "hotel_fofa": self.open_hotel and self.open_hotel_fofa,
-            "hotel_foodie": self.open_hotel and self.open_hotel_foodie,
-            "multicast_fofa": self.open_multicast and self.open_multicast_fofa,
-            "multicast_foodie": self.open_multicast and self.open_multicast_foodie,
         }
 
     @property
@@ -264,50 +186,12 @@ class ConfigManager:
         return self.config.getboolean("Settings", "open_update_time", fallback=True)
 
     @property
-    def multicast_region_list(self):
-        return [
-            region.strip()
-            for region in self.config.get(
-                "Settings", "multicast_region_list", fallback="all"
-            ).split(",")
-            if region.strip()
-        ]
-
-    @property
-    def hotel_region_list(self):
-        return [
-            region.strip()
-            for region in self.config.get(
-                "Settings", "hotel_region_list", fallback="all"
-            ).split(",")
-            if region.strip()
-        ]
-
-    @property
     def request_timeout(self):
         return self.config.getint("Settings", "request_timeout", fallback=10)
 
     @property
     def speed_test_timeout(self):
         return self.config.getint("Settings", "speed_test_timeout", fallback=10)
-
-    @property
-    def open_driver(self):
-        return self.config.getboolean(
-            "Settings", "open_driver", fallback=False
-        )
-
-    @property
-    def hotel_page_num(self):
-        return self.config.getint("Settings", "hotel_page_num", fallback=1)
-
-    @property
-    def multicast_page_num(self):
-        return self.config.getint("Settings", "multicast_page_num", fallback=1)
-
-    @property
-    def online_search_page_num(self):
-        return config.getint("Settings", "online_search_page_num", fallback=1)
 
     @property
     def open_empty_category(self):
@@ -327,7 +211,7 @@ class ConfigManager:
 
     @property
     def open_supply(self):
-        return self.config.getboolean("Settings", "open_supply", fallback=True)
+        return self.config.getboolean("Settings", "open_supply", fallback=False)
 
     @property
     def update_time_position(self):
@@ -399,7 +283,13 @@ class ConfigManager:
 
     @property
     def update_interval(self):
-        return self.config.getfloat("Settings", "update_interval", fallback=12)
+        raw = self.config.get("Settings", "update_interval", fallback="12")
+        if raw is None or str(raw).strip() == "":
+            return None
+        try:
+            return float(raw)
+        except (ValueError, TypeError):
+            return 12.0
 
     @property
     def update_times(self):

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<tv date="20260106064517 +0800">
+<tv date="20260106100851 +0800">
 	<channel id="CCTV-1">
 		<display-name lang="zh">CCTV-1</display-name>
 	</channel>
@@ -25188,6 +25188,12 @@
 	<programme channel="NewTV动作电影" start="20260106130200 +0800" stop="20260106141000 +0800">
 		<title lang="zh">毒战生死线</title>
 	</programme>
+	<programme channel="NewTV动作电影" start="20260106141000 +0800" stop="20260106144500 +0800">
+		<title lang="zh">巴康洋双面黑金石墨烯保暖被-渠道（右）</title>
+	</programme>
+	<programme channel="NewTV动作电影" start="20260106144500 +0800" stop="20260106161600 +0800">
+		<title lang="zh">公证人之深度危机</title>
+	</programme>
 	<channel id="NewTV惊悚悬疑">
 		<display-name lang="zh">NewTV惊悚悬疑</display-name>
 	</channel>
@@ -25230,7 +25236,10 @@
 	<programme channel="NewTV惊悚悬疑" start="20260106134000 +0800" stop="20260106141500 +0800">
 		<title lang="zh">BURRSAIL荣耀真钻机械腕表尊享组-渠道（右）</title>
 	</programme>
-	<channel id="IPTV经典电影">
-		<display-name lang="zh">IPTV经典电影</display-name>
-	</channel>
+	<programme channel="NewTV惊悚悬疑" start="20260106141500 +0800" stop="20260106152700 +0800">
+		<title lang="zh">特警使命：狙击风暴（4K）</title>
+	</programme>
+	<programme channel="NewTV惊悚悬疑" start="20260106152700 +0800" stop="20260106161500 +0800">
+		<title lang="zh">美国DoctorAchraf鲨鱼油神经酸-渠道（右）</title>
+	</programme>
 </tv>

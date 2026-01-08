@@ -1,5 +1,5 @@
 #EXTM3U x-tvg-url="https://gh-proxy.com/https://raw.githubusercontent.com/Guovin/iptv-api/refs/heads/master/output/epg/epg.gz"
-#EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="🕘️更新时间",2026-01-08 18:55:57
+#EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="🕘️更新时间",2026-01-09 06:30:10
 http://php.jdshipin.com/TVOD/iptv.php?id=rthk33
 #EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="📺央视频道",CCTV-1
 http://php.jdshipin.com/TVOD/iptv.php?id=rthk33
@@ -1468,8 +1468,6 @@ https://stream1.freetv.fun/zhe-jiang-qian-jiang-du-shi-3.ctv
 #EXTINF:-1 tvg-name="浙江钱江" tvg-logo="浙江钱江.png" group-title="☘️浙江频道",浙江钱江
 https://stream1.freetv.fun/zhe-jiang-qian-jiang-du-shi-5.ctv
 #EXTINF:-1 tvg-name="浙江钱江" tvg-logo="浙江钱江.png" group-title="☘️浙江频道",浙江钱江
-http://ali-m-l.cztv.com/channels/lantian/channel002/720p.m3u8
-#EXTINF:-1 tvg-name="浙江钱江" tvg-logo="浙江钱江.png" group-title="☘️浙江频道",浙江钱江
 https://stream1.freetv.fun/zhe-jiang-qian-jiang-du-shi-4.ctv
 #EXTINF:-1 tvg-name="浙江钱江都市" tvg-logo="浙江钱江都市.png" group-title="☘️浙江频道",浙江钱江都市
 http://zwebl02.cztv.com/live/channel021080P.m3u8?auth_key=2524708799-0-0-43f14b8147c890428975655007afb4cc
@@ -1509,8 +1507,6 @@ http://zhfivel02.cztv.com/channel03/1080p.m3u8?auth_key=2524708799-0-0-76c0751e0
 http://ali-m-l.cztv.com/channels/lantian/channel03/1080p.m3u8#https://ali-m-l.cztv.com/channels/lantian/channel003/1080p.m3u8#http://ali-m-l.cztv.com/channels/lantian/channel003/1080p.m3u8
 #EXTINF:-1 tvg-name="浙江经济生活" tvg-logo="浙江经济生活.png" group-title="☘️浙江频道",浙江经济生活
 https://ali-m-l.cztv.com/channels/lantian/channel003/1080p.m3u8
-#EXTINF:-1 tvg-name="浙江经济生活" tvg-logo="浙江经济生活.png" group-title="☘️浙江频道",浙江经济生活
-http://l.cztvcloud.com/channels/lantian/SXxiaoshan2/720p.m3u8
 #EXTINF:-1 tvg-name="浙江经济生活" tvg-logo="浙江经济生活.png" group-title="☘️浙江频道",浙江经济生活
 http://ali-vl.cztv.com/channels/lantian/channel003/360p.m3u8
 #EXTINF:-1 tvg-name="浙江经济生活" tvg-logo="浙江经济生活.png" group-title="☘️浙江频道",浙江经济生活
@@ -2997,10 +2993,14 @@ http://pulls.myun.tv/live/0dkp33j5.m3u8
 https://mobilelive.gxtv.cn/live/gx_live1007/playlist.m3u8
 #EXTINF:-1 tvg-name="广西新闻" tvg-logo="广西新闻.png" group-title="☘️广西频道",广西新闻
 https://tv.gxtv.cn/channel/channelivePlay_9dfd8600075811e9ba67e41f13b60c62.html
+#EXTINF:-1 tvg-name="广西新闻" tvg-logo="广西新闻.png" group-title="☘️广西频道",广西新闻
+https://tv.gxtv.cn/channel/channelivePlay_9dfd8600075811e9ba67e41f13b60c62.html
 #EXTINF:-1 tvg-name="广西国际" tvg-logo="广西国际.png" group-title="☘️广西频道",广西国际
 https://hlscdn.liangtv.cn/live/0234c48e0bc24fe1b41b9999a253e581/1075ee38e04f490690f6a36a16e09c79.m3u8
 #EXTINF:-1 tvg-name="广西国际" tvg-logo="广西国际.png" group-title="☘️广西频道",广西国际
 http://hlscdn.liangtv.cn/live/0234c48e0bc24fe1b41b9999a253e581/1075ee38e04f490690f6a36a16e09c79.m3u8?fbl=
+#EXTINF:-1 tvg-name="广西国际" tvg-logo="广西国际.png" group-title="☘️广西频道",广西国际
+https://tv.gxtv.cn/channel/channelivePlay_bfa17b64157f11e999f0e41f13b60c62.html
 #EXTINF:-1 tvg-name="广西国际" tvg-logo="广西国际.png" group-title="☘️广西频道",广西国际
 https://tv.gxtv.cn/channel/channelivePlay_bfa17b64157f11e999f0e41f13b60c62.html
 #EXTINF:-1 tvg-name="南宁影视娱乐" tvg-logo="南宁影视娱乐.png" group-title="☘️广西频道",南宁影视娱乐
@@ -4073,10 +4073,14 @@ https://83awgyp5.live.sxmty.com/live/hls/6f6f4b36f9bd42628b718b595ba507ed/724b7e
 https://stream1.freetv.fun/an-hui-guo-ji-16.m3u8
 #EXTINF:-1 tvg-name="安徽国际" tvg-logo="安徽国际.png" group-title="☘️安徽频道",安徽国际
 https://www.ahtv.cn/folder9000/folder20193?channelIndex=6
+#EXTINF:-1 tvg-name="安徽国际" tvg-logo="安徽国际.png" group-title="☘️安徽频道",安徽国际
+https://www.ahtv.cn/folder9000/folder20193?channelIndex=6
 #EXTINF:-1 tvg-name="安徽影视" tvg-logo="安徽影视.png" group-title="☘️安徽频道",安徽影视
 https://stream1.freetv.fun/an-hui-ying-shi-14.m3u8
 #EXTINF:-1 tvg-name="安徽影视" tvg-logo="安徽影视.png" group-title="☘️安徽频道",安徽影视
 https://stream1.freetv.fun/an-hui-ying-shi-15.m3u8
+#EXTINF:-1 tvg-name="安徽影视" tvg-logo="安徽影视.png" group-title="☘️安徽频道",安徽影视
+https://www.ahtv.cn/folder9000/folder20193?channelIndex=3
 #EXTINF:-1 tvg-name="安徽影视" tvg-logo="安徽影视.png" group-title="☘️安徽频道",安徽影视
 https://www.ahtv.cn/folder9000/folder20193?channelIndex=3
 #EXTINF:-1 tvg-name="安徽经济生活" tvg-logo="安徽经济生活.png" group-title="☘️安徽频道",安徽经济生活

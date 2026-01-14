@@ -1,5 +1,5 @@
 #EXTM3U x-tvg-url="https://gh-proxy.com/https://raw.githubusercontent.com/Guovin/iptv-api/refs/heads/master/output/epg/epg.gz"
-#EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="🕘️更新时间",2026-01-14 18:27:51
+#EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="🕘️更新时间",2026-01-15 06:23:48
 http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
 #EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="📺央视频道",CCTV-1
 http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
@@ -209,10 +209,6 @@ http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/322
 http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225730/index.m3u8
 #EXTINF:-1 tvg-name="CCTV10" tvg-logo="CCTV10.png" group-title="📺央视频道",CCTV-10
 https://zby.130519.xyz/PLTV/11/224/3221226169/index.m3u8
-#EXTINF:-1 tvg-name="CCTV10" tvg-logo="CCTV10.png" group-title="📺央视频道",CCTV-10
-http://iptv.huuc.edu.cn/hls/cctv10hd.m3u8
-#EXTINF:-1 tvg-name="CCTV10" tvg-logo="CCTV10.png" group-title="📺央视频道",CCTV-10
-https://zby.130519.xyz/PLTV/11/224/3221225743/index.m3u8
 #EXTINF:-1 tvg-name="CCTV11" tvg-logo="CCTV11.png" group-title="📺央视频道",CCTV-11
 http://iptv.huuc.edu.cn/hls/cctv11hd.m3u8
 #EXTINF:-1 tvg-name="CCTV11" tvg-logo="CCTV11.png" group-title="📺央视频道",CCTV-11
@@ -341,10 +337,6 @@ http://[2409:8087:1a01:df::4077]:80/ottrrs.hl.chinamobile.com/PLTV/88888888/8/32
 http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225765/index.m3u8
 #EXTINF:-1 tvg-name="CCTV17" tvg-logo="CCTV17.png" group-title="📺央视频道",CCTV-17
 http://[2409:8087:1a01:df::4025]:80/TVOD/88888888/224/3221225708/main.m3u8
-#EXTINF:-1 tvg-name="CCTV17" tvg-logo="CCTV17.png" group-title="📺央视频道",CCTV-17
-https://migu.188766.xyz/?migutoken=59cdab67dbc355f0546a7a38abe13a4d&id=CCTV17&type=yy
-#EXTINF:-1 tvg-name="CCTV17" tvg-logo="CCTV17.png" group-title="📺央视频道",CCTV-17
-http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225765/index.m3u8
 #EXTINF:-1 tvg-name="CETV1" tvg-logo="CETV1.png" group-title="📺央视频道",CETV-1
 https://migu.188766.xyz/?migutoken=36ef7f6bca62cec9abdcde133fce0012&id=CETV1&type=yy
 #EXTINF:-1 tvg-name="CETV1" tvg-logo="CETV1.png" group-title="📺央视频道",CETV-1
@@ -1093,16 +1085,6 @@ https://stream1.freetv.fun/hang-zhou-sheng-huo-2.ctv
 https://stream1.freetv.fun/hang-zhou-sheng-huo-3.ctv
 #EXTINF:-1 tvg-name="杭州影视" tvg-logo="杭州影视.png" group-title="☘️浙江频道",杭州影视
 https://stream1.freetv.fun/hang-zhou-ying-shi-2.ctv
-#EXTINF:-1 tvg-name="浙江国际" tvg-logo="浙江国际.png" group-title="☘️浙江频道",浙江国际
-https://stream1.freetv.fun/zhe-jiang-guo-ji-7.m3u8
-#EXTINF:-1 tvg-name="浙江国际" tvg-logo="浙江国际.png" group-title="☘️浙江频道",浙江国际
-https://stream1.freetv.fun/zhe-jiang-guo-ji-10.m3u8
-#EXTINF:-1 tvg-name="浙江国际" tvg-logo="浙江国际.png" group-title="☘️浙江频道",浙江国际
-https://stream1.freetv.fun/zhe-jiang-guo-ji-3.ctv
-#EXTINF:-1 tvg-name="浙江国际" tvg-logo="浙江国际.png" group-title="☘️浙江频道",浙江国际
-https://stream1.freetv.fun/zhe-jiang-guo-ji-4.m3u8
-#EXTINF:-1 tvg-name="浙江国际" tvg-logo="浙江国际.png" group-title="☘️浙江频道",浙江国际
-https://stream1.freetv.fun/zhe-jiang-guo-ji-5.ctv
 #EXTINF:-1 tvg-name="浙江国际" tvg-logo="浙江国际.png" group-title="☘️浙江频道",浙江国际
 https://stream1.freetv.fun/zhe-jiang-guo-ji-7.m3u8
 #EXTINF:-1 tvg-name="浙江国际" tvg-logo="浙江国际.png" group-title="☘️浙江频道",浙江国际

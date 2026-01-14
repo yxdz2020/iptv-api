@@ -1,5 +1,5 @@
 🕘️更新时间,#genre#
-2026-01-14 18:27:51,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
+2026-01-15 06:23:48,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
 
 📺央视频道,#genre#
 CCTV-1,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
@@ -106,8 +106,6 @@ CCTV-10,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/
 CCTV-10,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225730/index.m3u8
 CCTV-10,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225730/index.m3u8
 CCTV-10,https://zby.130519.xyz/PLTV/11/224/3221226169/index.m3u8
-CCTV-10,http://iptv.huuc.edu.cn/hls/cctv10hd.m3u8
-CCTV-10,https://zby.130519.xyz/PLTV/11/224/3221225743/index.m3u8
 CCTV-11,http://iptv.huuc.edu.cn/hls/cctv11hd.m3u8
 CCTV-11,https://zby.130519.xyz/PLTV/11/224/3221226101/index.m3u8
 CCTV-11,https://zby.130519.xyz/PLTV/11/224/3221226145/index.m3u8
@@ -172,8 +170,6 @@ CCTV-17,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888
 CCTV-17,http://[2409:8087:1a01:df::4077]:80/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225765/index.m3u8
 CCTV-17,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225765/index.m3u8
 CCTV-17,http://[2409:8087:1a01:df::4025]:80/TVOD/88888888/224/3221225708/main.m3u8
-CCTV-17,https://migu.188766.xyz/?migutoken=59cdab67dbc355f0546a7a38abe13a4d&id=CCTV17&type=yy
-CCTV-17,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225765/index.m3u8
 CETV-1,https://migu.188766.xyz/?migutoken=36ef7f6bca62cec9abdcde133fce0012&id=CETV1&type=yy
 CETV-1,http://[2409:8087:1a0b:df::4020]:80/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225652/index.m3u8
 CETV-1,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226494/1.m3u8
@@ -556,11 +552,6 @@ CETV-4,http://[2409:8087:1a0b:df::4020]:80/ottrrs.hl.chinamobile.com/TVOD/888888
 杭州生活,https://stream1.freetv.fun/hang-zhou-sheng-huo-2.ctv
 杭州生活,https://stream1.freetv.fun/hang-zhou-sheng-huo-3.ctv
 杭州影视,https://stream1.freetv.fun/hang-zhou-ying-shi-2.ctv
-浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-7.m3u8
-浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-10.m3u8
-浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-3.ctv
-浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-4.m3u8
-浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-5.ctv
 浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-7.m3u8
 浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-10.m3u8
 浙江国际,https://stream1.freetv.fun/zhe-jiang-guo-ji-3.ctv

@@ -38,7 +38,7 @@ from utils.tools import (
     custom_print,
     get_name_uri_from_dir,
     get_resolution_value,
-    get_public_url
+    get_public_url, build_path_list, get_real_path
 )
 from utils.types import ChannelData, OriginType, CategoryChannelData, WhitelistMaps
 from utils.whitelist import is_url_whitelisted, get_whitelist_url, get_whitelist_total_count
@@ -132,7 +132,10 @@ def get_channel_data_from_file(channels, file, whitelist_maps, blacklist,
                             if alias_name in local_data:
                                 for local_url in local_data[alias_name]:
                                     if not check_url_by_keywords(local_url, blacklist):
-                                        formatted = format_channel_data(local_url, "local")
+                                        local_url_origin: OriginType = "whitelist" if is_url_whitelisted(whitelist_maps,
+                                                                                                         local_url,
+                                                                                                         name) else "local"
+                                        formatted = format_channel_data(local_url, local_url_origin)
                                         if formatted["url"] not in existing_urls:
                                             category_dict[name].append(formatted)
                                             existing_urls.add(formatted["url"])
@@ -144,7 +147,11 @@ def get_channel_data_from_file(channels, file, whitelist_maps, blacklist,
                                         if re.match(pattern, local_name):
                                             for local_url in local_data[local_name]:
                                                 if not check_url_by_keywords(local_url, blacklist):
-                                                    formatted = format_channel_data(local_url, "local")
+                                                    local_url_origin: OriginType = "whitelist" if is_url_whitelisted(
+                                                        whitelist_maps,
+                                                        local_url,
+                                                        name) else "local"
+                                                    formatted = format_channel_data(local_url, local_url_origin)
                                                     if formatted["url"] not in existing_urls:
                                                         category_dict[name].append(formatted)
                                                         existing_urls.add(formatted["url"])
@@ -173,7 +180,8 @@ def get_channel_items(whitelist_maps, blacklist) -> CategoryChannelData:
     hls_data = None
     if config.open_rtmp:
         hls_data = get_name_uri_from_dir(constants.hls_path)
-    local_data = get_name_urls_from_file(config.local_file)
+    local_paths = build_path_list(constants.local_dir_path)
+    local_data = get_name_urls_from_file([get_real_path(constants.local_path)] + local_paths)
     whitelist_count = get_whitelist_total_count(whitelist_maps)
     blacklist_count = len(blacklist)
     if whitelist_count:
@@ -545,25 +553,41 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
     return grouped_results
 
 
-def sort_channel_result(channel_data, result=None, filter_host=False, ipv6_support=True):
+def sort_channel_result(channel_data, result=None, filter_host=False, ipv6_support=True, cate=None, name=None):
     """
     Sort channel result
     """
     channel_result = defaultdict(lambda: defaultdict(list))
-    for cate, obj in channel_data.items():
-        for name, values in obj.items():
+    categories = [cate] if cate else list(channel_data.keys())
+    retain = retain_origin
+    speed_lookup = get_speed_result
+    sorter = get_sort_result
+
+    for c in categories:
+        obj = channel_data.get(c, {}) or {}
+        names = [name] if name else list(obj.keys())
+        for n in names:
+            values = obj.get(n) or []
             whitelist_result = []
-            test_result = result.get(cate, {}).get(name, []) if result else []
-            if values:
-                for value in values:
-                    if value["origin"] in retain_origin or (
-                            not ipv6_support and result and value["ipv_type"] == "ipv6"
-                    ):
-                        whitelist_result.append(value)
-                    elif filter_host or not result:
-                        test_result.append({**value, **get_speed_result(value["host"])} if filter_host else value)
-            total_result = whitelist_result + get_sort_result(test_result, ipv6_support=ipv6_support)
-            channel_result[cate][name].extend(total_result)
+            test_result = (result.get(c, {}).get(n, []) if result else []).copy()
+
+            for value in values:
+                origin = value.get("origin")
+                if origin in retain or (not ipv6_support and result and value.get("ipv_type") == "ipv6"):
+                    whitelist_result.append(value)
+                elif filter_host:
+                    host = value.get("host")
+                    merged = {**value, **(speed_lookup(host) or {})}
+                    test_result.append(merged)
+
+            total_result = whitelist_result + sorter(test_result, ipv6_support=ipv6_support)
+            seen_urls = set()
+            for item in total_result:
+                url = item.get("url")
+                if url and url not in seen_urls:
+                    channel_result[c][n].append(item)
+                    seen_urls.add(url)
+
     return channel_result
 
 
@@ -574,7 +598,6 @@ def generate_channel_statistic(logger, cate, name, values):
     total = len(values)
     valid = len([v for v in values if (v.get("speed") or 0) > 0 and (v.get("delay") or -1) != -1])
     valid_rate = (valid / total * 100) if total > 0 else 0
-    whitelist_count = len([v for v in values if v.get("origin") == "whitelist"])
     ipv4_count = len([v for v in values if v.get("ipv_type") == "ipv4"])
     ipv6_count = len([v for v in values if v.get("ipv_type") == "ipv6"])
     min_delay = min((v.get("delay") for v in values if (v.get("delay") or -1) != -1), default=-1)
@@ -591,9 +614,9 @@ def generate_channel_statistic(logger, cate, name, values):
         default="None"
     )
     logger.info(
-        f"Category: {cate}, Name: {name}, Total: {total}, Valid: {valid}, Valid Percent: {valid_rate:.2f}%, Whitelist: {whitelist_count}, IPv4: {ipv4_count}, IPv6: {ipv6_count}, Min Delay: {min_delay} ms, Max Speed: {max_speed:.2f} M/s, Avg Speed: {avg_speed:.2f} M/s, Max Resolution: {max_resolution}")
+        f"Category: {cate}, Name: {name}, Total: {total}, Valid: {valid}, Valid Percent: {valid_rate:.2f}%, IPv4: {ipv4_count}, IPv6: {ipv6_count}, Min Delay: {min_delay} ms, Max Speed: {max_speed:.2f} M/s, Avg Speed: {avg_speed:.2f} M/s, Max Resolution: {max_resolution}")
     print(
-        f"\n{f"{t("name.category")}: {cate}, {t("name.name")}: {name}, {t("name.total")}: {total}, {t("name.valid")}: {valid}, {t("name.valid_percent")}: {valid_rate:.2f}%, {t("name.whitelist")}: {whitelist_count}, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t("name.min_delay")}: {min_delay} ms, {t("name.max_speed")}: {max_speed:.2f} M/s, {t("name.average_speed")}: {avg_speed:.2f} M/s, {t("name.max_resolution")}: {max_resolution}"}")
+        f"\n{f"{t("name.category")}: {cate}, {t("name.name")}: {name}, {t("name.total")}: {total}, {t("name.valid")}: {valid}, {t("name.valid_percent")}: {valid_rate:.2f}%, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t("name.min_delay")}: {min_delay} ms, {t("name.max_speed")}: {max_speed:.2f} M/s, {t("name.average_speed")}: {avg_speed:.2f} M/s, {t("name.max_resolution")}: {max_resolution}"}")
 
 
 def process_write_content(
@@ -644,9 +667,9 @@ def process_write_content(
                     item_url = add_url_info(item_url, item["extra_info"])
                 total_item_url = f"{hls_url}/{item['id']}.m3u8" if hls_url else item_url
                 content += f"\n{name},{total_item_url}"
-    if open_empty_category and no_result_name:
+    if open_empty_category and no_result_name and is_last:
         custom_print(f"\n{t("msg.no_result_channel")}")
-        content += f"\n\n{t("content.no_result_channel_genre")},#genre#"
+        content += f"\n\n{t("content.no_result_channel")},#genre#"
         for i, name in enumerate(no_result_name):
             end_char = ", " if i < len(no_result_name) - 1 else ""
             custom_print(name, end=end_char)
@@ -691,8 +714,7 @@ def process_write_content(
                         )
                 conn.commit()
             finally:
-                if is_last:
-                    return_db_connection(constants.rtmp_data_path, conn)
+                return_db_connection(constants.rtmp_data_path, conn)
     try:
         target_dir = os.path.dirname(path) or "."
         os.makedirs(target_dir, exist_ok=True)
@@ -701,6 +723,10 @@ def process_write_content(
             tmpf.write(content)
             tmp_path = tmpf.name
         os.replace(tmp_path, path)
+        try:
+            os.chmod(path, 0o644)
+        except Exception:
+            pass
     except Exception as e:
         print(e)
         try:

@@ -38,7 +38,7 @@ from utils.tools import (
     custom_print,
     get_name_uri_from_dir,
     get_resolution_value,
-    get_public_url, build_path_list, get_real_path
+    get_public_url, build_path_list, get_real_path, count_files_by_ext
 )
 from utils.types import ChannelData, OriginType, CategoryChannelData, WhitelistMaps
 from utils.whitelist import is_url_whitelisted, get_whitelist_url, get_whitelist_total_count
@@ -184,10 +184,13 @@ def get_channel_items(whitelist_maps, blacklist) -> CategoryChannelData:
     local_data = get_name_urls_from_file([get_real_path(constants.local_path)] + local_paths)
     whitelist_count = get_whitelist_total_count(whitelist_maps)
     blacklist_count = len(blacklist)
+    channel_logo_count = count_files_by_ext(resource_path(constants.channel_logo_path), [config.logo_type])
     if whitelist_count:
         print(t("msg.whitelist_found").format(count=whitelist_count))
     if blacklist_count:
         print(t("msg.blacklist_found").format(count=blacklist_count))
+    if channel_logo_count:
+        print(t("msg.channel_logo_found").format(count=channel_logo_count))
 
     if os.path.exists(user_source_file):
         with open(user_source_file, "r", encoding="utf-8") as file:
@@ -596,18 +599,20 @@ def generate_channel_statistic(logger, cate, name, values):
     Generate channel statistic
     """
     total = len(values)
-    valid = len([v for v in values if (v.get("speed") or 0) > 0 and (v.get("delay") or -1) != -1])
+    valid_items = [
+        v for v in values
+        if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed")) and (v.get("delay") or -1) != -1
+    ]
+    valid = len(valid_items)
     valid_rate = (valid / total * 100) if total > 0 else 0
     ipv4_count = len([v for v in values if v.get("ipv_type") == "ipv4"])
     ipv6_count = len([v for v in values if v.get("ipv_type") == "ipv6"])
     min_delay = min((v.get("delay") for v in values if (v.get("delay") or -1) != -1), default=-1)
-    max_speed = max((v.get("speed") for v in values if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))),
-                    default=0)
-    avg_speed = (
-        sum((v.get("speed") or 0) for v in values if
-            (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))) / valid
-        if valid > 0 else 0
+    max_speed = max(
+        (v.get("speed") for v in values if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))),
+        default=0
     )
+    avg_speed = sum((v.get("speed") or 0) for v in valid_items) / valid if valid > 0 else 0
     max_resolution = max(
         (v.get("resolution") for v in values if v.get("resolution")),
         key=lambda r: get_resolution_value(r),

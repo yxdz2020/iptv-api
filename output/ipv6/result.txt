@@ -1,5 +1,5 @@
 🕘️更新时间,#genre#
-2026-02-18 07:55:27,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
+2026-02-20 07:51:11,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
 
 📺央视频道,#genre#
 CCTV-1,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
@@ -318,6 +318,7 @@ CETV-4,https://migu.188766.xyz/?migutoken=d5d19d868e1df41e984866fc7ca15071&id=CE
 云南卫视,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221227028/1.m3u8?GuardEncType=2&accountinfo=%7E%7EV2.0%7EGfQPqRNVeBjTMsZ48qu0SA%7EtP4-l0lmSfjwLWEfK_el1vH_mv-s1zo4AQJwdedaVwG9xkuFTDg8J26cwOrNJzn20BErrHdLhuZ9EzLUCD3PMW-OMx4MGteHV2vLeW6BqoY%2CEND
 云南卫视,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221226444/index.m3u8
 云南卫视,https://t.freetv.fun/live/yun-nan-wei-shi-2.m3u8
+云南卫视,https://t.freetv.fun/live/yun-nan-wei-shi-3.m3u8
 
 ☘️广东频道,#genre#
 广东珠江,http://r.jdshipin.com/sE5vO
@@ -412,6 +413,7 @@ CETV-4,https://migu.188766.xyz/?migutoken=d5d19d868e1df41e984866fc7ca15071&id=CE
 浙江民生,https://t.freetv.fun/live/zhe-jiang-min-sheng-3.m3u8
 浙江民生,https://t.freetv.fun/live/zhe-jiang-min-sheng.m3u8
 浙江民生,https://t.freetv.fun/live/zhe-jiang-min-sheng-4.m3u8
+浙江民生,https://t.freetv.fun/live/zhe-jiang-min-sheng-2.m3u8
 浙江新闻,https://stream1.freetv.fun/zhe-jiang-xin-wen-5.m3u8
 浙江新闻,https://stream1.freetv.fun/zhe-jiang-xin-wen-11.m3u8
 浙江新闻,https://stream1.freetv.fun/zhe-jiang-xin-wen-1.m3u8
@@ -1662,6 +1664,7 @@ CN卡通,https://stream1.freetv.fun/cnqia-tong-3.ctv
 浙江少儿,https://stream1.freetv.fun/zhe-jiang-shao-er-4.ctv
 浙江少儿,https://stream1.freetv.fun/zhe-jiang-shao-er-6.ctv
 浙江少儿,https://stream1.freetv.fun/zhe-jiang-shao-er-9.ctv
+浙江少儿,http://ali-xwl.cztv.com/live/channel081080Plxw.m3u8
 河北少儿科教,https://stream1.freetv.fun/he-bei-shao-er-ke-jiao-7.ctv
 河北少儿科教,https://stream1.freetv.fun/he-bei-shao-er-ke-jiao-10.ctv
 河北少儿科教,https://stream1.freetv.fun/he-bei-shao-er-ke-jiao-15.ctv

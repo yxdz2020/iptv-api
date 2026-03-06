@@ -1,28 +1,18 @@
-name: 'Update schedule'
-
-# ⚠️注意：请不要在 fork 的仓库中添加 `on: schedule` 定时任务（cron）。
-# Forks 可能被大量复制并触发定时执行，当前 GitHub Actions 资源使用已接近上限，
-# 大量 fork 的定时任务可能导致工作流被禁用。若需要定时执行，请使用其它部署方式。
-#
-# ⚠️NOTICE: Do NOT add `on: schedule` cron triggers in forked repositories.
-# Forks may multiply scheduled runs and GitHub Actions resource usage is near limits.
-# Many scheduled workflows from forks can cause workflows to be disabled.
-# If scheduled execution is required, use other deployment methods.
+name: Update schedule
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 22 */2 * *'
 
 jobs:
-  push:
-    runs-on: ${{ matrix.operating-system }}
-    strategy:
-      matrix:
-        operating-system: [ 'ubuntu-latest' ]
+  update-iptv:
+    runs-on: ubuntu-latest
     steps:
       - name: Set branch name
         id: vars
-        run: echo "BRANCH_NAME=${{ github.repository_owner == 'Guovin' && 'gd' || 'master' }}" >> $GITHUB_ENV
-      - uses: actions/checkout@v3
+        run: echo "BRANCH_NAME=${{ github.repository_owner == 'yxdz2020' && 'gd' || 'master' }}" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
         with:
           ref: ${{ env.BRANCH_NAME }}
       - name: Run with setup-python 3.13
@@ -48,3 +38,10 @@ jobs:
             git commit -m "Github Action Auto Updated"
             git push --force
           fi
+      - name: Delete workflow runs
+        uses: yxdz2020/delete-workflow-runs@v20260116
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 10
